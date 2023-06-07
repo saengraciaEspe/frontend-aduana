@@ -1,0 +1,12 @@
+.layout{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+
+
+.item{
+  padding-bottom: 1%;
+}
+
