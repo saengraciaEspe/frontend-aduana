@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import "./modalAgenteAduana.css";
 import api_agente_aduana from '../../../services/agente-aduanero';
-import { CurrencyBitcoin } from '@mui/icons-material';
+
 
 
 const StyledModal = {
@@ -119,20 +119,6 @@ console.log(data)
     }
   ); 
 
-  useEffect(() => {
-    
-    setDataForm({
-      "nitAgenteAduana" : data?._id,
-      "nombre": data?.nombre,
-      "apellido" : data?.apellido,
-      "Pais" : data?.Pais,
-      "direccion" :data?.direccion,
-      "telefono" :data?.telefono
-    })
-  
-    
-  }, [data])
-  
   
 
   const onChange = (e) => {
