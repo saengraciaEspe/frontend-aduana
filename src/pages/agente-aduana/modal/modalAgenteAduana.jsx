@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { Modal, TextField, Button, Grid, MenuItem, Select, InputLabel } from '@mui/material';
 
 import { useForm } from 'react-hook-form';
 
 import "./modalAgenteAduana.css";
+import api_agente_aduana from '../../../services/agente-aduanero';
+import { CurrencyBitcoin } from '@mui/icons-material';
 
 
 const StyledModal = {
@@ -60,16 +62,22 @@ const StyledTextField = styled(TextField)(({  }) => ({
 }));
 
 const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
-
+console.log(data)
 
   const { register, handleSubmit,
     formState :{ errors } } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async(data) => {
     console.log(data);
+    await api_agente_aduana.post(data);
+    window.location.reload()
   }
 
   const errorValidMsg = {
+    nitAgenteAduana : {
+      required : "El nit es requerido",
+      pattern  : "El nit no tiene un formato correcto"
+    },
     nombre : {
       required : "El nombre es requerido",
       pattern  : "El nombre no tiene un formato correcto"
@@ -77,6 +85,10 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
     apellido : {
       required : "El apellido es requerido",
       pattern  : "El apellido no tiene un formato correcto"
+    },
+    Pais:{
+      required : "La dirección es requerida",
+      pattern  : "La dirección no tiene un formato correcto"
     },
     direccion : {
       required : "La dirección es requerida",
@@ -89,14 +101,39 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
     
   }
 
-  const [dataForm, setDataForm ]= useState({
-    nombre : data?.nombre,
-    apellido: data?.apellido,
-    pais:data?.pais,
-    direccion :data?.direccion,
-    telefono : data?.telefono
-  }); 
+  /* const agenteToUpdate = async() => {
+   
+    return await api_agente_aduana.getForId(data._id);
+  } */
+  
+  
 
+  const [dataForm, setDataForm ]= useState(
+    {
+    "nitAgenteAduana" : '',
+    "nombre": '',
+    "apellido" : '',
+    "Pais" : '',
+    "direccion" :'',
+    "telefono" :''
+    }
+  ); 
+
+  useEffect(() => {
+    
+    setDataForm({
+      "nitAgenteAduana" : data?._id,
+      "nombre": data?.nombre,
+      "apellido" : data?.apellido,
+      "Pais" : data?.Pais,
+      "direccion" :data?.direccion,
+      "telefono" :data?.telefono
+    })
+  
+    
+  }, [data])
+  
+  
 
   const onChange = (e) => {
     e.preventDefault();
@@ -106,10 +143,16 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
 
   }
 
-  const onSubmitUpdate = (e) => {
+  
+
+
+
+  const onSubmitUpdate = async(e) => {
     e.preventDefault();
-    console.log(dataForm)
-    
+    console.log(dataForm);
+    await api_agente_aduana.put(...dataForm);
+
+   /*  window.location.reload() */
   }
  
   const modalType = {
@@ -120,6 +163,16 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
+          <Grid item xs={12} md={6}>
+            <StyledTextField label="NIT"
+              type="text"
+              {...register('nitAgenteAduana')}
+              error = { !!errors.nitAgenteAduana }
+              helperText = {errorValidMsg["nitAgenteAduana"][errors.nitAgenteAduana?.type]}
+            />
+          
+          </Grid>
+          
           <Grid item xs={12} md={6}>
             <StyledTextField label="Nombre"
               type="text"
@@ -150,7 +203,11 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
 
           <Grid item xs={12} md={6}>
             <StyledTextField id='select' label='País'  type='text'
-              {...register('pais')}
+              {...register('Pais',{
+                required: 'La dirección es requerida',
+              })}
+              error = { !!errors.Pais }
+              helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -203,11 +260,21 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
+            <StyledTextField label="NIT"
+              type="text"
+              name = "nitAgenteAduana"
+              onKeyUp={onChange}
+              value = {dataForm.nitAgenteAduana}
+              disabled = {true}
+            />
+          
+          </Grid>
+          <Grid item xs={12} md={6}>
             <StyledTextField label="Nombre"
               type="text"
               name = "nombre"
               onKeyUp={onChange}
-              value = {data.nombre}
+              value = {dataForm.nombre}
 
             />
           
@@ -217,10 +284,9 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
             <StyledTextField
               label="Apellido"
               type="text"
-          
               name = "apellido"
               onKeyUp={onChange}
-              value = {data.apellido}
+              value = {dataForm.apellido}
             
             />
           </Grid>
@@ -228,9 +294,9 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
           <Grid item xs={12} md={6}>
             <StyledTextField id='pais' label='País'  type='text'
          
-             name = "pais"
+             name = "Pais"
              onKeyUp={onChange}
-             value = {data.pais}
+             value = {dataForm.Pais}
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -247,7 +313,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
               type="text"
               name = "direccion"
               onKeyUp={onChange}
-              value = {data.direccion}
+              value = {dataForm.direccion}
               
             />
           </Grid>
@@ -257,7 +323,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data }) => {
               type="text"
               name = "telefono"
               onKeyUp={onChange}
-              value = {data.telefono}
+              value = {dataForm.telefono}
               
             />
           </Grid>
