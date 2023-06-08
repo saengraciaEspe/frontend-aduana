@@ -1,14 +1,35 @@
 import API_INSTANCE from ".";
 
-const URL = "api/aduana";
+const URL = "/aduana";
 
-export const get = async() => {
+ const getAll = async() => {
   const {data} = await API_INSTANCE.get(URL);
   return data;
 }
  
 
 
-export const post = async( {  } )=> {
-
+const post = async(data)=> {
+  await API_INSTANCE.post(URL,data);
 }
+
+const getForId = async(id) => {
+  const {data} = await API_INSTANCE.get(`${URL}/${id}`);
+ 
+  return data;
+}
+
+
+const put = async(data) => {
+  await API_INSTANCE.put(`${URL}/${data.nitAgenteAduana}`,data)
+} 
+
+
+const api_agente_aduana = {
+  getAll,
+  getForId,
+  post,
+  put
+}
+
+export default api_agente_aduana;
