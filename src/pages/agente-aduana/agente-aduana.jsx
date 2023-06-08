@@ -6,7 +6,7 @@ import ModalAgenteAduana from './modal/modalAgenteAduana';
 import "./agente-aduana.css";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { get } from '../../services/agente-aduanero';
+import api_agente_aduana from '../../services/agente-aduanero';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -42,15 +42,11 @@ const AgenteAduana = () => {
   useEffect(() =>{
 
     const fetchAllAgentesAduana = async() =>{
-      try{
-        const data = await get();
+        const data = await api_agente_aduana.getAll();
         setAgentesAduana(data);
-      }catch(error){
-        console.log(error);
-      }
-    }
-    
+    };
 
+    fetchAllAgentesAduana();
   }, [])
 
 
@@ -79,27 +75,27 @@ const AgenteAduana = () => {
     },
   ];
 
+  const cols = [
+    "NIT",
+    "Nombre",
+    "Apellido",
+    "País",
+    "Dirección",
+    "Teléfono",
+    "Acciones"
+  ]
+
+
   const [opened, setOpened] = useState(false);
   const [modalType, setModalType] = useState('add');
-  const [agenteToEdit, setAgenteToEdit ] = useState({
-    nombre : "",
-    apellido: "",
-    pais: "",
-    direccion : "",
-    telefono : ""
-  });
+  const [agenteToEdit, setAgenteToEdit ] = useState(
+  );
 
   const openModal = (option, data) => {
    
     setModalType(option);
     setOpened(true);
-    setAgenteToEdit({
-      nombre : data?.nombre,
-      apellido: data?.apellido,
-      pais: data?.pais,
-      direccion : data?.direccion,
-      telefono : data?.telefono
-    });
+    setAgenteToEdit(data);
    
   }
 
@@ -133,10 +129,12 @@ const AgenteAduana = () => {
         </TableHead>
         <TableBody>
           
-          {rows.map((curr, i) => {
+          {agentesAduana.map((curr, i) => {
         
             return (<StyledTableRow key={i} >
-
+                    <StyledTableCell align="center">
+                        { curr._id }
+                    </StyledTableCell>
                     <StyledTableCell align="center">
                         { curr.nombre }
                     </StyledTableCell>
@@ -144,7 +142,7 @@ const AgenteAduana = () => {
                         { curr.apellido }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.pais }
+                        { curr.Pais }
                     </StyledTableCell>
                     <StyledTableCell align="center">
                         { curr.direccion }
