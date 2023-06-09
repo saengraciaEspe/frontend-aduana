@@ -1,6 +1,6 @@
 import API_INSTANCE from ".";
 
-const URL = "/aduana";
+const URL = "/reporte";
 
  const getAll = async() => {
   const {data} = await API_INSTANCE.get(URL);
@@ -21,7 +21,7 @@ const getForId = async(id) => {
 
 
 const put = async(data) => {
-  await API_INSTANCE.put(`${URL}/${data.nitAgenteAduana}`,data)
+  await API_INSTANCE.put(`${URL}/${data.nReportes}`,data)
 } 
 
 const delForId = async(id) => {
@@ -29,7 +29,7 @@ const delForId = async(id) => {
 }
 
 
-const api_agente_aduana = {
+const api_reporte = {
   getAll,
   getForId,
   post,
@@ -37,4 +37,4 @@ const api_agente_aduana = {
   delForId
 }
 
-export default api_agente_aduana;
+export default api_reporte;

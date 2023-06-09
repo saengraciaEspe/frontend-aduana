@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper,Grid, Modal} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import "./agente-aduana.css";
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import api_agente_aduana from '../../services/agente-aduanero';
+import api_empresa from '../../services/empresa';
 import InputField from '../../components/input-field/input-field';
 
 
@@ -37,18 +37,18 @@ const StyledTable = styled(Table)(({ theme }) => ({
 }));
 
 
-const AgenteAduana = () => {
+const Empresa = () => {
 
-  const [agentesAduana, setAgentesAduana] = useState([]);
+  const [empresa, setEmpresas] = useState([]);
   
   useEffect(() =>{
 
-    const fetchAllAgentesAduana = async() =>{
-        const data = await api_agente_aduana.getAll();
-        setAgentesAduana(data);
+    const fetchAllProducts = async() =>{
+        const data = await api_empresa.getAll();
+        setEmpresas(data);
     };
 
-    fetchAllAgentesAduana();
+    fetchAllProducts();
   }, [])
 
 
@@ -78,12 +78,11 @@ const AgenteAduana = () => {
   ];
 
   const cols = [
-    "NIT",
-    "Nombre",
-    "Apellido",
-    "País",
-    "Dirección",
-    "Teléfono",
+    "rifEmpresa",
+    "nombreEmpresa",
+    "paisEmpresa",
+    "telefonoEmpresa",
+    "fechaEmision",
     "Acciones"
   ]
 
@@ -101,12 +100,11 @@ const AgenteAduana = () => {
 
 
   const [toSubmit, setToSubmit] = useState({
-      "nitAgenteAduana" : '',
-      "nombre": '',
-      "apellido" : '',
-      "Pais" : '',
-      "direccion" :'',
-      "telefono" :''
+      "rifEmpresa" : '',
+      "nombreEmpresa": '',
+      "paisEmpresa" : '',
+      "telefonoEmpresa" : '',
+      "fechaEmision":''
   });
 
   const handleChange = (e) => {
@@ -119,14 +117,14 @@ const AgenteAduana = () => {
 
   const submitAdd = async(e) =>{
     e.preventDefault();
-    await api_agente_aduana.post(toSubmit);
+    await api_empresa.post(toSubmit);
     window.location.reload()
   }
 
   const sumbitUpdate = async( e ) => {
     e.preventDefault();
     console.log(toSubmit)
-    await api_agente_aduana.put(
+    await api_empresa.put(
       toSubmit
     );
     window.location.reload()
@@ -134,7 +132,7 @@ const AgenteAduana = () => {
  
   const handleDelete = async(id) => {
   
-    await api_agente_aduana.delForId(
+    await api_empresa.delForId(
       id
     );
     window.location.reload()
@@ -164,24 +162,24 @@ const AgenteAduana = () => {
 
   const bodyAdd = 
     (<form onSubmit = { submitAdd }>
-        <h3>Agregar un agente de aduana</h3>
+        <h3>Agregar un empresa</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <InputField label="NIT"
+            <InputField label="rifEmpresa"
               type="text"
-              name="nitAgenteAduana"
+              name="rifEmpresa"
               onChange={handleChange}
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
+            <InputField label="nombreEmpresa"
               type="text"
-              name="nombre"
+              name="nombreEmpresa"
               onChange={handleChange}
             />
           
@@ -189,16 +187,16 @@ const AgenteAduana = () => {
 
           <Grid item xs={12} md={6}>
             <InputField
-              label="Apellido"
+              label="paisEmpresa"
               type="text"
-              name="apellido"
+              name="paisEmpresa"
               onChange={handleChange}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <InputField id='select' label='País'  type='text'
-              name="Pais"
+            <InputField id='select' label='telefonoEmpresa'  type='text'
+              name="telefonoEmpresa"
               onChange={handleChange}
             >
             {/*  {countries.map((curr, i) =>(
@@ -208,23 +206,14 @@ const AgenteAduana = () => {
              )) } */}
 
             </InputField>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6}>
             <InputField
-              label="Dirección"
+              label="fechaEmision"
               type="text"
-              name="direccion"
+              name="fechaEmision"
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Teléfono"
-              type="text"
-              name="telefono"
-              onChange={handleChange}
-            />
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
@@ -238,28 +227,28 @@ const AgenteAduana = () => {
   const bodyUpdate = 
   (
     <form onSubmit={sumbitUpdate }>
-        <h3>Editar un agente de aduana</h3>
+        <h3>Editar una empresa</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <InputField label="NIT"
+            <InputField label="rifEmpresa"
               type="text"
-              name = "nitAgenteAduana"
+              name = "rifEmpresa"
               onChange={handleChange}
-              value = {toSubmit.nitAgenteAduana ?? '' }
+              value = {toSubmit.rifEmpresa ?? '' }
               
               disabled = {true}
             />
           
           </Grid>
           <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
+            <InputField label="nombreEmpresa"
               type="text"
-              name = "nombre"
+              name = "nombreEmpresa"
               onChange={handleChange}
-              value = {toSubmit.nombre ?? ''  }
+              value = {toSubmit.nombreEmpresa ?? ''  }
               
             />
           
@@ -267,21 +256,21 @@ const AgenteAduana = () => {
 
           <Grid item xs={12} md={6}>
             <InputField
-              label="Apellido"
+              label="paisEmpresa"
               type="text"
-              name = "apellido"
+              name = "paisEmpresa"
               onChange={handleChange}
-              value = {toSubmit.apellido ?? '' }
+              value = {toSubmit.paisEmpresa ?? '' }
              
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <InputField id='pais' label='País'  type='text'
+            <InputField id='telefonoEmpresa' label='telefonoEmpresa'  type='text'
          
-             name = "Pais"
+             name = "telefonoEmpresa"
              onChange={handleChange}
-             value = {toSubmit.Pais ?? ''  }
+             value = {toSubmit.telefonoEmpresa ?? ''  }
           
             >
             {/*  {countries.map((curr, i) =>(
@@ -292,28 +281,17 @@ const AgenteAduana = () => {
 
             </InputField>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <InputField
-              label="Dirección"
+              label="fechaEmision"
               type="text"
-              name = "direccion"
+              name = "fechaEmision"
               onChange={handleChange}
-              value = {toSubmit.direccion ?? ''  }
+              value = {toSubmit.fechaEmision ?? '' }
              
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Teléfono"
-              type="text"
-              name = "telefono"
-              onChange={handleChange}
-              value = {toSubmit.telefono ?? ''  }
-        
-              
-            />
-          </Grid>
+
           <Grid item xs={12} md={12}>
             <div align="right">
               <Button type='submit' color="primary" >Insertar</Button>
@@ -346,39 +324,36 @@ const AgenteAduana = () => {
         </TableHead>
         <TableBody>
           
-          {agentesAduana.map((curr, i) => {
+          {empresa.map((curr, i) => {
         
             return (<StyledTableRow key={i} >
                     <StyledTableCell align="center">
                         { curr._id }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.nombre }
+                        { curr.nombreEmpresa }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.apellido }
+                        { curr.paisEmpresa }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.Pais }
+                        { curr.telefonoEmpresa }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.direccion }
+                        { curr.fechaEmision }
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                        { curr.telefono }
-                    </StyledTableCell>
-
+                    
               <StyledTableCell align="center">
               <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
                 <Button onClick={() => (selectUpdateOrDelete(
-                  {nitAgenteAduana: curr._id, 
-                    nombre : curr.nombre,
-                    apellido:curr.apellido,
-                    Pais : curr.Pais,
-                    direccion : curr.direccion,
-                    telefono : curr.telefono
+                  {
+                    "rifEmpresa" : curr._id,
+                    "nombreEmpresa":  curr.nombreEmpresa,
+                    "paisEmpresa" : curr.paisEmpresa,
+                    "telefonoEmpresa" :curr.telefonoEmpresa,
+                    "fechaEmision" : curr.fechaEmision
                                         }, "update"))}>  <EditIcon/>
                 </Button>
               </ButtonGroup>
@@ -418,4 +393,4 @@ const AgenteAduana = () => {
   )
 }
 
-export  {AgenteAduana};
+export  { Empresa };

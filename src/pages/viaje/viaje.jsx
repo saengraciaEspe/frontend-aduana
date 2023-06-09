@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper,Grid, Modal} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import "./agente-aduana.css";
+;
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import api_agente_aduana from '../../services/agente-aduanero';
+import api_viaje from '../../services/viaje';
 import InputField from '../../components/input-field/input-field';
 
 
@@ -37,18 +37,18 @@ const StyledTable = styled(Table)(({ theme }) => ({
 }));
 
 
-const AgenteAduana = () => {
+const Viaje = () => {
 
-  const [agentesAduana, setAgentesAduana] = useState([]);
+  const [viajes, setViajes] = useState([]);
   
   useEffect(() =>{
 
-    const fetchAllAgentesAduana = async() =>{
-        const data = await api_agente_aduana.getAll();
-        setAgentesAduana(data);
+    const fetchAllViajes = async() =>{
+        const data = await api_viaje.getAll();
+        setViajes(data);
     };
 
-    fetchAllAgentesAduana();
+    fetchAllViajes();
   }, [])
 
 
@@ -78,12 +78,12 @@ const AgenteAduana = () => {
   ];
 
   const cols = [
-    "NIT",
-    "Nombre",
-    "Apellido",
-    "País",
-    "Dirección",
-    "Teléfono",
+    "codigoRuta",
+    "paisOrigen",
+    "paisDestino",
+    "puertoEntrada",
+    "fechaSalida",
+    "fechaIngreso",
     "Acciones"
   ]
 
@@ -101,12 +101,12 @@ const AgenteAduana = () => {
 
 
   const [toSubmit, setToSubmit] = useState({
-      "nitAgenteAduana" : '',
-      "nombre": '',
-      "apellido" : '',
-      "Pais" : '',
-      "direccion" :'',
-      "telefono" :''
+      "codigoRuta" : '',
+      "paisOrigen": '',
+      "paisDestino" : '',
+      "puertoEntrada" : '',
+      "fechaSalida" : '',
+      "fechaIngreso" : ''
   });
 
   const handleChange = (e) => {
@@ -119,14 +119,14 @@ const AgenteAduana = () => {
 
   const submitAdd = async(e) =>{
     e.preventDefault();
-    await api_agente_aduana.post(toSubmit);
+    await api_viaje.post(toSubmit);
     window.location.reload()
   }
 
   const sumbitUpdate = async( e ) => {
     e.preventDefault();
     console.log(toSubmit)
-    await api_agente_aduana.put(
+    await api_viaje.put(
       toSubmit
     );
     window.location.reload()
@@ -134,7 +134,7 @@ const AgenteAduana = () => {
  
   const handleDelete = async(id) => {
   
-    await api_agente_aduana.delForId(
+    await api_viaje.delForId(
       id
     );
     window.location.reload()
@@ -164,24 +164,24 @@ const AgenteAduana = () => {
 
   const bodyAdd = 
     (<form onSubmit = { submitAdd }>
-        <h3>Agregar un agente de aduana</h3>
+        <h3>Agregar un viaje</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <InputField label="NIT"
+            <InputField label="codigoRuta"
               type="text"
-              name="nitAgenteAduana"
+              name="codigoRuta"
               onChange={handleChange}
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
+            <InputField label="paisOrigen"
               type="text"
-              name="nombre"
+              name="paisOrigen"
               onChange={handleChange}
             />
           
@@ -189,16 +189,16 @@ const AgenteAduana = () => {
 
           <Grid item xs={12} md={6}>
             <InputField
-              label="Apellido"
+              label="paisDestino"
               type="text"
-              name="apellido"
+              name="paisDestino"
               onChange={handleChange}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <InputField id='select' label='País'  type='text'
-              name="Pais"
+            <InputField id='select' label='puertoEntrada'  type='text'
+              name="puertoEntrada"
               onChange={handleChange}
             >
             {/*  {countries.map((curr, i) =>(
@@ -209,23 +209,23 @@ const AgenteAduana = () => {
 
             </InputField>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <InputField
-              label="Dirección"
+              label="fechaSalida"
               type="text"
-              name="direccion"
+              name="fechaSalida"
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <InputField
-              label="Teléfono"
+              label="fechaIngreso"
               type="text"
-              name="telefono"
+              name="fechaIngreso"
               onChange={handleChange}
             />
           </Grid>
+      
           <Grid item xs={12} md={12}>
             <div align="right">
               <Button type='submit' color="primary" >Insertar</Button>
@@ -238,28 +238,28 @@ const AgenteAduana = () => {
   const bodyUpdate = 
   (
     <form onSubmit={sumbitUpdate }>
-        <h3>Editar un agente de aduana</h3>
+        <h3>Editar un viaje</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <InputField label="NIT"
+            <InputField label="codigoRuta"
               type="text"
-              name = "nitAgenteAduana"
+              name = "codigoRuta"
               onChange={handleChange}
-              value = {toSubmit.nitAgenteAduana ?? '' }
+              value = {toSubmit.codigoRuta ?? '' }
               
               disabled = {true}
             />
           
           </Grid>
           <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
+            <InputField label="paisOrigen"
               type="text"
-              name = "nombre"
+              name = "paisOrigen"
               onChange={handleChange}
-              value = {toSubmit.nombre ?? ''  }
+              value = {toSubmit.paisOrigen ?? ''  }
               
             />
           
@@ -267,21 +267,21 @@ const AgenteAduana = () => {
 
           <Grid item xs={12} md={6}>
             <InputField
-              label="Apellido"
+              label="paisDestino"
               type="text"
-              name = "apellido"
+              name = "paisDestino"
               onChange={handleChange}
-              value = {toSubmit.apellido ?? '' }
+              value = {toSubmit.paisDestino ?? '' }
              
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <InputField id='pais' label='País'  type='text'
+            <InputField id='puertoEntrada' label='puertoEntrada'  type='text'
          
-             name = "Pais"
+             name = "puertoEntrada"
              onChange={handleChange}
-             value = {toSubmit.Pais ?? ''  }
+             value = {toSubmit.puertoEntrada ?? ''  }
           
             >
             {/*  {countries.map((curr, i) =>(
@@ -292,26 +292,24 @@ const AgenteAduana = () => {
 
             </InputField>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <InputField
-              label="Dirección"
+              label="fechaSalida"
               type="text"
-              name = "direccion"
+              name = "fechaSalida"
               onChange={handleChange}
-              value = {toSubmit.direccion ?? ''  }
+              value = {toSubmit.fechaSalida ?? '' }
              
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <InputField
-              label="Teléfono"
+              label="fechaIngreso"
               type="text"
-              name = "telefono"
+              name = "fechaIngreso"
               onChange={handleChange}
-              value = {toSubmit.telefono ?? ''  }
-        
-              
+              value = {toSubmit.fechaIngreso ?? '' }
+             
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -346,26 +344,26 @@ const AgenteAduana = () => {
         </TableHead>
         <TableBody>
           
-          {agentesAduana.map((curr, i) => {
+          {viajes.map((curr, i) => {
         
             return (<StyledTableRow key={i} >
                     <StyledTableCell align="center">
                         { curr._id }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.nombre }
+                        { curr.paisOrigen }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.apellido }
+                        { curr.paisDestino }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.Pais }
+                        { curr.puertoEntrada }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.direccion }
+                        { curr.fechaSalida }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.telefono }
+                        { curr.fechaIngreso }
                     </StyledTableCell>
 
               <StyledTableCell align="center">
@@ -373,12 +371,13 @@ const AgenteAduana = () => {
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
                 <Button onClick={() => (selectUpdateOrDelete(
-                  {nitAgenteAduana: curr._id, 
-                    nombre : curr.nombre,
-                    apellido:curr.apellido,
-                    Pais : curr.Pais,
-                    direccion : curr.direccion,
-                    telefono : curr.telefono
+                  {
+                    "codigoRuta" : curr._id,
+                    "paisOrigen":  curr.paisOrigen,
+                    "paisDestino" : curr.paisDestino,
+                    "puertoEntrada" :curr.puertoEntrada,
+                    "fechaSalida" : curr.fechaSalida,
+                    "fechaIngreso" : curr.fechaIngreso
                                         }, "update"))}>  <EditIcon/>
                 </Button>
               </ButtonGroup>
@@ -418,4 +417,4 @@ const AgenteAduana = () => {
   )
 }
 
-export  {AgenteAduana};
+export  { Viaje };
