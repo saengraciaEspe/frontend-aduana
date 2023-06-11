@@ -9,7 +9,6 @@ import api_agente_aduana from '../../../services/agente-aduanero';
 
 
 
-
 const StyledModal = {
   position: 'absolute',
   width: '50%',

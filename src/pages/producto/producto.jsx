@@ -170,7 +170,10 @@ const Producto = () => {
               type="text"
               name="partidaId"
               onChange={handleChange}
+<<<<<<< HEAD
               required
+=======
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -187,18 +190,30 @@ const Producto = () => {
           <Grid item xs={12} md={6}>
             <InputField
               label="unidadFisica"
+<<<<<<< HEAD
               type="number"
               name="unidadFisica"
               onChange={handleChange}
               required
+=======
+              type="text"
+              name="unidadFisica"
+              onChange={handleChange}
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
+<<<<<<< HEAD
             <InputField id='select' label='tarifaAdvalorem'  type='number'
               name="tarifaAdvalorem"
               onChange={handleChange}
               required
+=======
+            <InputField id='select' label='tarifaAdvalorem'  type='text'
+              name="tarifaAdvalorem"
+              onChange={handleChange}
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -231,7 +246,11 @@ const Producto = () => {
               name = "partidaId"
               onChange={handleChange}
               value = {toSubmit.partidaId ?? '' }
+<<<<<<< HEAD
               required
+=======
+              
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
               disabled = {true}
             />
           
@@ -242,7 +261,11 @@ const Producto = () => {
               name = "nombre"
               onChange={handleChange}
               value = {toSubmit.nombre ?? ''  }
+<<<<<<< HEAD
               required
+=======
+              
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -254,7 +277,11 @@ const Producto = () => {
               name = "unidadFisica"
               onChange={handleChange}
               value = {toSubmit.unidadFisica ?? '' }
+<<<<<<< HEAD
               required
+=======
+             
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -264,8 +291,12 @@ const Producto = () => {
              name = "tarifaAdvalorem"
              onChange={handleChange}
              value = {toSubmit.tarifaAdvalorem ?? ''  }
+<<<<<<< HEAD
              
              required
+=======
+          
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>

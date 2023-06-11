@@ -169,7 +169,11 @@ const Traslado = () => {
             <InputField label="codigoTraslado"
               type="text"
               name="codigoTraslado"
+<<<<<<< HEAD
               onChange={handleChange} required
+=======
+              onChange={handleChange}
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -178,7 +182,11 @@ const Traslado = () => {
             <InputField label="tipoAlmacen"
               type="text"
               name="tipoAlmacen"
+<<<<<<< HEAD
               onChange={handleChange} required
+=======
+              onChange={handleChange}
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -188,7 +196,11 @@ const Traslado = () => {
               label="naviera"
               type="text"
               name="naviera"
+<<<<<<< HEAD
               onChange={handleChange} required
+=======
+              onChange={handleChange}
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -228,7 +240,11 @@ const Traslado = () => {
               type="text"
               name = "codigoTraslado"
               onChange={handleChange}
+<<<<<<< HEAD
               value = {toSubmit.codigoTraslado ?? '' } required
+=======
+              value = {toSubmit.codigoTraslado ?? '' }
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
               
               disabled = {true}
             />
@@ -240,7 +256,11 @@ const Traslado = () => {
               name = "tipoAlmacen"
               onChange={handleChange}
               value = {toSubmit.tipoAlmacen ?? ''  }
+<<<<<<< HEAD
               required
+=======
+              
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -252,7 +272,11 @@ const Traslado = () => {
               name = "naviera"
               onChange={handleChange}
               value = {toSubmit.naviera ?? '' }
+<<<<<<< HEAD
               required
+=======
+             
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -262,7 +286,11 @@ const Traslado = () => {
              name = "codigoRuta"
              onChange={handleChange}
              value = {toSubmit.codigoRuta ?? ''  }
+<<<<<<< HEAD
              required
+=======
+          
+>>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>

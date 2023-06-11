@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper,Grid, Modal} from '@mui/material';
+import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import "./agente-aduana.css";
