@@ -171,10 +171,7 @@ const Reporte = () => {
               type="text"
               name="nReportes"
               onChange={handleChange}
-<<<<<<< HEAD
               required
-=======
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -184,10 +181,7 @@ const Reporte = () => {
               type="text"
               name="rifEmpresa"
               onChange={handleChange}
-<<<<<<< HEAD
               required
-=======
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -198,10 +192,7 @@ const Reporte = () => {
               type="text"
               name="fechaEmision"
               onChange={handleChange}
-<<<<<<< HEAD
               required
-=======
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -209,10 +200,7 @@ const Reporte = () => {
             <InputField id='select' label='codigoOperacion'  type='text'
               name="codigoOperacion"
               onChange={handleChange}
-<<<<<<< HEAD
               required
-=======
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -245,11 +233,7 @@ const Reporte = () => {
               name = "nReportes"
               onChange={handleChange}
               value = {toSubmit.nReportes ?? '' }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
               disabled = {true}
             />
           
@@ -260,11 +244,7 @@ const Reporte = () => {
               name = "rifEmpresa"
               onChange={handleChange}
               value = {toSubmit.rifEmpresa ?? ''  }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -276,11 +256,7 @@ const Reporte = () => {
               name = "fechaEmision"
               onChange={handleChange}
               value = {toSubmit.fechaEmision ?? '' }
-<<<<<<< HEAD
               required
-=======
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -290,11 +266,7 @@ const Reporte = () => {
              name = "codigoOperacion"
              onChange={handleChange}
              value = {toSubmit.codigoOperacion ?? ''  }
-<<<<<<< HEAD
              required
-=======
-          
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>

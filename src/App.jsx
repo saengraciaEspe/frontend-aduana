@@ -13,8 +13,9 @@ import NavBar from './components/navbar/navbar';
 
 const Layout = ({ children }) =>{
 
-    const output = (<div className='layout' >
-      <NavBar></NavBar>
+    const output = (
+    <div className='layout-app' >
+      <NavBar/>
       <Outlet/>
     </div>)
     return output;

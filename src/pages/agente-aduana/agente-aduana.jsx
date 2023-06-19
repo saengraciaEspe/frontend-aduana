@@ -12,9 +12,10 @@ import ModalAgenteAduana from './modal/modalAgenteAduana';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
+    background: '#579BB1',
+    color: '#FFF',
+    
+
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -22,13 +23,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&': {
+    backgroundColor: 'rgb(187, 209, 220)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+
+  '&:hover':{
+    backgroundColor : '#C9ECF8'
+  }
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -39,7 +44,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const AgenteAduana = () => {
 
   const [agentesAduana, setAgentesAduana] = useState([]);
-  
+  const [updateTable, setUpdateTable] = useState(false);
   useEffect(() =>{
 
     const fetchAllAgentesAduana = async() =>{
@@ -48,9 +53,7 @@ const AgenteAduana = () => {
     };
 
     fetchAllAgentesAduana();
-  }, [])
-
-
+  }, [updateTable])
   const cols = [
     "NIT",
     "Nombre",
@@ -65,17 +68,16 @@ const AgenteAduana = () => {
   const [modalShow, setModalShow] = useState(false);
   const [renderModal, setRenderModal] = useState(false);
   const [type, setType] = useState('add');
-  const [data, setData] = useState(undefined);
+  const [data, setData] = useState({});
+
+  
+
+  console.log(updateTable);
 
   const fnBreakerModal = ({ data, type }) => {
-    const onModal = {
-      "add"   : ( ) => {setModalShow(!modalShow); setType(type); setData(data); },
-      "update": ( ) => {setModalShow(!modalShow); setType(type); setData(data); },
-    }
     
     setModalShow(!modalShow); setType(type); setData({...data})
     setRenderModal(!renderModal)
-  
 
   }
   const handleDelete = async(id) => {
@@ -83,13 +85,13 @@ const AgenteAduana = () => {
     await api_agente_aduana.delForId(
       id
     );
-    window.location.reload()
+    setUpdateTable((prev) => !prev)
   } 
 
   return (
     <div className='layout'>
     <div className='item'>
-    <Button className='btn' 
+    <Button
       onClick={() =>(fnBreakerModal({ data :{}, type : "add" }))}
       variant="contained" 
       startIcon={<AddCircleIcon/>}> 
@@ -134,14 +136,14 @@ const AgenteAduana = () => {
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
                 <Button onClick={() => (fnBreakerModal(
-                  {data : {
-                    nitAgenteAduana: curr._id, 
-                    nombre : curr.nombre,
-                    apellido:curr.apellido,
-                    Pais : curr.Pais,
-                    direccion : curr.direccion,
-                    telefono : curr.telefono
-                                        }, type: "update"}))} >  <EditIcon/>
+                  { data : {
+                      nitAgenteAduana : curr._id, 
+                      nombre          : curr.nombre,
+                      apellido        : curr.apellido,
+                      Pais            : curr.Pais,
+                      direccion       : curr.direccion,
+                      telefono         : curr.telefono
+                    }, type: "update"}))} >  <EditIcon/>
                 </Button>
               </ButtonGroup>
               </StyledTableCell>
@@ -154,14 +156,13 @@ const AgenteAduana = () => {
     
 
 { (renderModal)? <ModalAgenteAduana 
-    opened = {modalShow}
-    fnBreaker = {setModalShow}
-    type = {type}
-    data = {data}
-    render = {setRenderModal}
-  >
-
-  </ModalAgenteAduana> : <></>}
+    opened      = {modalShow}
+    fnBreaker   = {setModalShow}
+    type        = {type}
+    data        = {data}
+    render      = {setRenderModal}
+    updateTable = {setUpdateTable}
+  /> : <></>}
   </div>
   )
 }

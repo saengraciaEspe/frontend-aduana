@@ -61,19 +61,21 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 }));
 
-const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
+const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
   
   console.log(data?.nitAgenteAduana)
-
-
-  const [dataFrm, setDataFrm] = useState()
 
   const { register, handleSubmit,
     formState :{ errors } } = useForm({
       mode : "onBlur",
       defaultValues : {
-        nitAgenteAduana:data?.nitAgenteAduana
+        nitAgenteAduana:  data?.nitAgenteAduana,
+        nombre         :  data?.nombre,
+        apellido       :  data?.apellido,
+        Pais           :  data?.Pais,
+        direccion      :  data?.direccion,
+        telefono       :  data?.telefono
       }
 
     });
@@ -81,7 +83,8 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
   const onSubmit = async(data) => {
     console.log(data);
     await api_agente_aduana.post(data);
-    window.location.reload()
+    updateTable((prev) => !prev)
+    
   }
 
   const errorValidMsg = {
@@ -112,49 +115,6 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
     
   }
 
-  /* const agenteToUpdate = async() => {
-   
-    return await api_agente_aduana.getForId(data._id);
-  } */
-  
-  
-
-  const [dataForm, setDataForm ]= useState(
-    {
-    "nitAgenteAduana" : '',
-    "nombre": '',
-    "apellido" : '',
-    "Pais" : '',
-    "direccion" :'',
-    "telefono" :''
-    }
-  ); 
-
-  
-
-  const onChange = (e) => {
-    e.preventDefault();
-    setDataForm((prev) => ({...prev, [e.target.name]:e.target.value}))
-    console.log(dataForm);
-
-
-  }
-
-  
-
-
-
-  const onSubmitUpdate = async(e) => {
-    e.preventDefault();
-    console.log(dataForm);
-    await api_agente_aduana.put(...dataForm);
-
-   /*  window.location.reload() */
-  }
- 
-
-
-
 
   const modalType = {
     "add": (<div style={StyledModal} >
@@ -184,7 +144,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               type="text"
               {...register('nombre',
                 {
-                  required: 'El nombre es requerido',
+                  required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
               error = { !!errors.nombre }
@@ -199,7 +159,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               type="text"
               {...register('apellido',
                 {
-                  required: 'El apellido es requerido',
+                  required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
               error = { !!errors.apellido }
@@ -210,7 +170,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
           <Grid item xs={12} md={6}>
             <StyledTextField id='select' label='País'  type='text'
               {...register('Pais',{
-                required: 'La dirección es requerida',
+                required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
               error = { !!errors.Pais }
@@ -226,7 +186,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               label="Dirección"
               type="text"
               {...register('direccion', {
-                required: 'La dirección es requerida',
+                required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
               error = { !!errors.direccion }
@@ -247,8 +207,12 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={() =>{fnBreaker(!opened); render(false)}} >Cancelar</Button>
+              <Button onClick={() =>{fnBreaker(!opened); render(false); updateTable((prev) =>!prev)  }}  
+                      type='submit' 
+                      color="primary" >Insertar</Button>
+              <Button onClick={() =>{fnBreaker(!opened); render(false)}}
+              >Cancelar
+               </Button>
             </div>
           </Grid>
         </Grid>
@@ -283,7 +247,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               type="text"
               {...register('nombre',
                 {
-                  required: 'El nombre es requerido',
+                  required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
               error = { !!errors.nombre }
@@ -298,7 +262,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               type="text"
               {...register('apellido',
                 {
-                  required: 'El apellido es requerido',
+                  required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
               error = { !!errors.apellido }
@@ -309,7 +273,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
           <Grid item xs={12} md={6}>
             <StyledTextField id='select' label='País'  type='text'
               {...register('Pais',{
-                required: 'La dirección es requerida',
+                required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
               error = { !!errors.Pais }
@@ -325,7 +289,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
               label="Dirección"
               type="text"
               {...register('direccion', {
-                required: 'La dirección es requerida',
+                required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
               error = { !!errors.direccion }
@@ -346,8 +310,8 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render }) => {
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={() =>{fnBreaker(!opened); console.log(opened); render(false);}} >Cancelar</Button>
+              <Button onClick={() =>{fnBreaker(!opened); render(false); updateTable((prev) =>!prev)  }} type='submit' color="primary" >Insertar</Button>
+              <Button onClick={() =>{fnBreaker(!opened); render(false);}} >Cancelar</Button>
             </div>
           </Grid>
         </Grid>

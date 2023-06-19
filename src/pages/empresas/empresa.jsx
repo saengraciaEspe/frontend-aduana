@@ -171,11 +171,7 @@ const Empresa = () => {
             <InputField label="rifEmpresa"
               type="text"
               name="rifEmpresa"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -184,11 +180,7 @@ const Empresa = () => {
             <InputField label="nombreEmpresa"
               type="text"
               name="nombreEmpresa"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -198,22 +190,14 @@ const Empresa = () => {
               label="paisEmpresa"
               type="text"
               name="paisEmpresa"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
             <InputField id='select' label='telefonoEmpresa'  type='text'
               name="telefonoEmpresa"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -225,16 +209,10 @@ const Empresa = () => {
             <Grid item xs={12} md={6}>
             <InputField
               label="fechaEmision"
-<<<<<<< HEAD
               type="date"
               name="fechaEmision"
               onChange={handleChange}
               required
-=======
-              type="text"
-              name="fechaEmision"
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
           </Grid>
@@ -261,11 +239,7 @@ const Empresa = () => {
               name = "rifEmpresa"
               onChange={handleChange}
               value = {toSubmit.rifEmpresa ?? '' }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
               disabled = {true}
             />
           
@@ -276,11 +250,7 @@ const Empresa = () => {
               name = "nombreEmpresa"
               onChange={handleChange}
               value = {toSubmit.nombreEmpresa ?? ''  }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -292,11 +262,7 @@ const Empresa = () => {
               name = "paisEmpresa"
               onChange={handleChange}
               value = {toSubmit.paisEmpresa ?? '' }
-<<<<<<< HEAD
               required
-=======
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -306,11 +272,7 @@ const Empresa = () => {
              name = "telefonoEmpresa"
              onChange={handleChange}
              value = {toSubmit.telefonoEmpresa ?? ''  }
-<<<<<<< HEAD
              required
-=======
-          
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -323,19 +285,11 @@ const Empresa = () => {
           <Grid item xs={12} md={6}>
             <InputField
               label="fechaEmision"
-<<<<<<< HEAD
               type="date"
               name = "fechaEmision"
               onChange={handleChange}
               value = {toSubmit.fechaEmision ?? '' }
               required
-=======
-              type="text"
-              name = "fechaEmision"
-              onChange={handleChange}
-              value = {toSubmit.fechaEmision ?? '' }
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 

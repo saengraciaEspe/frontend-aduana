@@ -174,11 +174,7 @@ const Operacion = () => {
             <InputField label="codigoOperacion"
               type="text"
               name="codigoOperacion"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -187,11 +183,7 @@ const Operacion = () => {
             <InputField label="tipo"
               type="text"
               name="tipo"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -201,22 +193,14 @@ const Operacion = () => {
               label="estado"
               type="text"
               name="estado"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
             <InputField id='select' label='nitAgenteAduana'  type='text'
               name="nitAgenteAduana"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -231,11 +215,7 @@ const Operacion = () => {
               label="codigoTraslado"
               type="text"
               name="codigoTraslado"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -243,11 +223,7 @@ const Operacion = () => {
               label="partidaId"
               type="text"
               name="partidaId"
-<<<<<<< HEAD
               onChange={handleChange} required
-=======
-              onChange={handleChange}
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -273,11 +249,7 @@ const Operacion = () => {
               name = "codigoOperacion"
               onChange={handleChange}
               value = {toSubmit.codigoOperacion ?? '' }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
               disabled = {true}
             />
           
@@ -288,11 +260,7 @@ const Operacion = () => {
               name = "tipo"
               onChange={handleChange}
               value = {toSubmit.tipo ?? ''  }
-<<<<<<< HEAD
               required
-=======
-              
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           
           </Grid>
@@ -304,11 +272,7 @@ const Operacion = () => {
               name = "estado"
               onChange={handleChange}
               value = {toSubmit.estado ?? '' }
-<<<<<<< HEAD
               required
-=======
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
 
@@ -318,11 +282,7 @@ const Operacion = () => {
              name = "nitAgenteAduana"
              onChange={handleChange}
              value = {toSubmit.nitAgenteAduana ?? ''  }
-<<<<<<< HEAD
              required
-=======
-          
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             >
             {/*  {countries.map((curr, i) =>(
               <MenuItem key={i} value={curr}>
@@ -339,11 +299,7 @@ const Operacion = () => {
               name = "codigoTraslado"
               onChange={handleChange}
               value = {toSubmit.codigoTraslado ?? '' }
-<<<<<<< HEAD
               required
-=======
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -353,11 +309,7 @@ const Operacion = () => {
               name = "partidaId"
               onChange={handleChange}
               value = {toSubmit.partidaId ?? '' }
-<<<<<<< HEAD
               required
-=======
-             
->>>>>>> 290b827312cb383b6e0ddbecb75514fc865e9a27
             />
           </Grid>
           <Grid item xs={12} md={12}>
