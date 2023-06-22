@@ -4,8 +4,8 @@ import { Modal, TextField, Button, Grid, MenuItem, Select, InputLabel } from '@m
 
 import { useForm } from 'react-hook-form';
 
-import "./modalAgenteAduana.css";
-import api_agente_aduana from '../../../services/agente-aduanero';
+/* import "./ModalEmpresa.css"; */
+import api_viaje from '../../../services/viaje';
 
 
 
@@ -29,160 +29,165 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 }));
 
-const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable }) => {
+const ModalViaje = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
   
-  console.log(data?.nitAgenteAduana)
+  console.log(data?.codigoRuta)
 
   const { register, handleSubmit,
     formState :{ errors } } = useForm({
       mode : "onBlur",
       defaultValues : {
-        nitAgenteAduana:  data?.nitAgenteAduana,
-        nombre         :  data?.nombre,
-        apellido       :  data?.apellido,
-        Pais           :  data?.Pais,
-        direccion      :  data?.direccion,
-        telefono       :  data?.telefono
+        codigoRuta  :   data?.codigoRuta,
+        paisOrigen      :   data?.paisOrigen,
+        paisDestino     :   data?.paisDestino,
+        puertoEntrada   :   data?.puertoEntrada,
+        fechaSalida     :   data?.fechaSalida,
+        fechaIngreso    :   data?.fechaIngreso
+      
       }
 
     });
 
   const onAdd = async(data) => {
     console.log(data);
-    await api_agente_aduana.post(data);
+    await api_viaje.post(data);
     updateTable((prev) => !prev)
     fnBreaker(!opened); render(false); 
   }
 
   const onUpdate = async(data) => {
     console.log(data);
-    await api_agente_aduana.put(data);
+    await api_viaje.put(data);
     updateTable((prev) => !prev)
     fnBreaker(!opened); render(false); 
   }
 
   const errorValidMsg = {
-    nitAgenteAduana : {
-      required : "El nit es requerido",
+    codigoRuta : {
+      required : "El código de ruta es requerido",
       pattern  : "Se debe ingresar un número de cédula, el cuál debe tener 10 dígitos"
     },
-    nombre : {
-      required : "El nombre es requerido",
-      pattern  : "La primera letra del nombre debe empezar con mayúscula"
+    paisOrigen : {
+      required : "El país de origen es requerido",
+      pattern  : "La primera letra del país debe empezar con mayúscula"
     },
-    apellido : {
-      required : "El apellido es requerido",
-      pattern  : "El apellido no tiene un formato correcto"
+    paisDestino : {
+      required : "El país de destino es requerido",
+      pattern  : "La primera letra del país debe empezar con mayúscula"
     },
-    Pais:{
-      required : "El país es requerido",
-      pattern  : "El país no tiene un formato correcto"
+    puertoEntrada:{
+      required : "El nombre del puerto es requerida",
+      pattern  : "La primera letra del nombre del puerto debe empezar con mayúscula"
     },
-    direccion : {
-      required : "La dirección es requerida",
-      pattern  : "La dirección no tiene un formato correcto"
+    fechaSalida :{
+      required : "La fecha de salida es requerida",
+      
     },
-    telefono :{
-      required : "El teléfono es requerido",
-      pattern  : "El número de teléfono debe empezar con 09 seguido de 8 dígitos"
+    fechaIngreso :{
+      required : "La fecha de ingreso es requerida",
+      
     }
-    
   }
 
 
   const modalType = {
     "add": (<div style={StyledModal} >
       <form onSubmit={ handleSubmit(onAdd) } noValidate>
-        <h3>Agregar un agente de aduana</h3>
+        <h3>Agregar una viaje</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <StyledTextField label="NIT"
+            <StyledTextField label="Código de ruta"
               type="text"
-              {...register('nitAgenteAduana',{
+              {...register('codigoRuta',{
                 pattern : /^\d{10}$/g,
                 required : true
               })}
               
               
-               error = { !!errors.nitAgenteAduana }
-               helperText = {errorValidMsg["nitAgenteAduana"][errors.nitAgenteAduana?.type]}
+               error = { !!errors.codigoRuta }
+               helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
+           
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Nombre"
+            <StyledTextField label="País de origen"
               type="text"
-              {...register('nombre',
+              {...register('paisOrigen',
                 {
                   required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
-              error = { !!errors.nombre }
-              helperText = {errorValidMsg["nombre"][errors.nombre?.type]}
+              error = { !!errors.paisOrigen }
+              helperText = {errorValidMsg["paisOrigen"][errors.paisOrigen?.type]}
             />
           
           </Grid>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Apellido"
+              label="País de destino"
               type="text"
-              {...register('apellido',
+              {...register('paisDestino',
                 {
                   required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                  
                 })}
-              error = { !!errors.apellido }
-              helperText = {errorValidMsg["apellido"][errors.apellido?.type]}
+              error = { !!errors.paisDestino }
+              helperText = {errorValidMsg["paisDestino"][errors.paisDestino?.type]}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='País'  type='text'
-              {...register('Pais',{
+            <StyledTextField id='select' label='Puerto de entrada'  type='text'
+              {...register('puertoEntrada',{
                 required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
-              error = { !!errors.Pais }
-              helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
+              error = { !!errors.puertoEntrada }
+              helperText = {errorValidMsg["puertoEntrada"][errors.puertoEntrada?.type]}
             >
       
 
             </StyledTextField>
           </Grid>
-
           <Grid item xs={12} md={6}>
-            <StyledTextField
-              label="Dirección"
-              type="text"
-              {...register('direccion', {
+            <StyledTextField id='select' 
+            /* label='Fecha de salida'  */ 
+            type='date' 
+              {...register('fechaSalida',{
                 required: true,
-                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                
               })}
-              error = { !!errors.direccion }
-              helperText = {errorValidMsg["direccion"][errors.direccion?.type]}
-            />
+              error = { !!errors.fechaSalida }
+              helperText = {errorValidMsg["fechaSalida"][errors.fechaSalida?.type] || 'Fecha de salida'}
+            >
+      
+
+            </StyledTextField>
           </Grid>
           <Grid item xs={12} md={6}>
-            <StyledTextField
-              label="Teléfono"
-              type="text"
-              {...register('telefono', {
+            <StyledTextField id='select' /* label='Fecha de ingreso'  */ type='date'
+              {...register('fechaIngreso',{
                 required: true,
-                pattern : /^(09)\d{8}$/
+                
               })}
-              error = { !!errors.telefono }
-              helperText = {errorValidMsg["telefono"][errors.telefono?.type]}
-            />
+              error = { !!errors.fechaIngreso }
+              helperText = {errorValidMsg["fechaIngreso"][errors.fechaIngreso?.type] || 'Fecha de entrada'}
+            >
+      
+
+            </StyledTextField>
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
-              <Button onClick={() =>{fnBreaker(!opened); render(false); updateTable((prev) =>!prev)  }}  
+              <Button  
                       type='submit' 
                       color="primary" >Insertar</Button>
               <Button onClick={() =>{fnBreaker(!opened); render(false)}}
@@ -196,93 +201,93 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
     ),
     "update": (<div style={StyledModal} >
       <form onSubmit={ handleSubmit(onUpdate) } noValidate>
-        <h3>Editar un agente de aduana</h3>
+        <h3>Editar un viaje</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <StyledTextField label="NIT"
-      
+            <StyledTextField label="Código de ruta"
               type="text"
-              {...register('nitAgenteAduana',{
+              {...register('codigoRuta',{
                 pattern : /^\d{10}$/g,
                 required : true
               })}
               
               
-               error = { !!errors.nitAgenteAduana }
-               helperText = {errorValidMsg["nitAgenteAduana"][errors.nitAgenteAduana?.type]}
+               error = { !!errors.codigoRuta }
+               helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
                disabled={true}
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Nombre"
+            <StyledTextField label="País de origen"
               type="text"
-              {...register('nombre',
+              {...register('paisOrigen',
                 {
                   required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
-              error = { !!errors.nombre }
-              helperText = {errorValidMsg["nombre"][errors.nombre?.type]}
+              error = { !!errors.paisOrigen }
+              helperText = {errorValidMsg["paisOrigen"][errors.paisOrigen?.type]}
             />
           
           </Grid>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Apellido"
+              label="País de destino"
               type="text"
-              {...register('apellido',
+              {...register('paisDestino',
                 {
                   required: true,
                   pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
-              error = { !!errors.apellido }
-              helperText = {errorValidMsg["apellido"][errors.apellido?.type]}
+              error = { !!errors.paisDestino }
+              helperText = {errorValidMsg["paisDestino"][errors.paisDestino?.type]}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='País'  type='text'
-              {...register('Pais',{
+            <StyledTextField id='select' label='Puerto de entrada'  type='text'
+              {...register('puertoEntrada',{
                 required: true,
                 pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
-              error = { !!errors.Pais }
-              helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
+              error = { !!errors.puertoEntrada }
+              helperText = {errorValidMsg["puertoEntrada"][errors.puertoEntrada?.type]}
             >
-           
+      
 
             </StyledTextField>
           </Grid>
-
           <Grid item xs={12} md={6}>
-            <StyledTextField
-              label="Dirección"
-              type="text"
-              {...register('direccion', {
+            <StyledTextField id='select' label='Fecha de salida'  type='date'
+              {...register('fechaSalida',{
                 required: true,
-                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                
               })}
-              error = { !!errors.direccion }
-              helperText = {errorValidMsg["direccion"][errors.direccion?.type]}
-            />
+              error = { !!errors.fechaSalida }
+              helperText = {errorValidMsg["fechaSalida"][errors.fechaSalida?.type]}
+            >
+      
+
+            </StyledTextField>
           </Grid>
           <Grid item xs={12} md={6}>
-            <StyledTextField
-              label="Teléfono"
-              type="text"
-              {...register('telefono', {
+            <StyledTextField id='select' label='Fecha de ingreso'  type='date'
+              {...register('fechaIngreso',{
                 required: true,
-                pattern : /^(09)\d{8}$/
+                
               })}
-              error = { !!errors.telefono }
-              helperText = {errorValidMsg["telefono"][errors.telefono?.type]}
-            />
+              error = { !!errors.fechaIngreso }
+              helperText = {errorValidMsg["fechaIngreso"][errors.fechaIngreso?.type]}
+            >
+      
+
+            </StyledTextField>
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
@@ -314,4 +319,4 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
   )
 }
 
-export default ModalAgenteAduana;
+export default ModalViaje;

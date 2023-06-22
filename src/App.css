@@ -1,0 +1,10 @@
+.layout-app{
+  display: flex;
+  justify-content: center;
+  
+  height: 100vh;
+}
+
+body{
+  background: rgb(187, 209, 220);
+}

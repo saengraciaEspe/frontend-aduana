@@ -7,15 +7,15 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import api_operacion from '../../services/operacion';
-import InputField from '../../components/input-field/input-field';
+import ModalOperacion from './modal/modalOperacion';
+import Animated from '../../components/animated/animated';
 
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
+    background: '#579BB1',
+    color: '#FFF',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -23,24 +23,28 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&': {
+    backgroundColor: 'rgb(187, 209, 220)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+  '&:hover':{
+    backgroundColor : '#C9ECF8'
+  }
 }));
 
-const StyledTable = styled(Table)(({ theme }) => ({
+const StyledTable = styled(Table) ({
   boxShadow: '10px 21px 610px 111px rgb(143, 143, 145) , -2px -2px 116px 111px  rgb(143, 143, 145)'
-}));
+});
 
 
 const Operacion = () => {
 
   const [operaciones, setOperaciones] = useState([]);
-  
+  const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() =>{
 
     const fetchAllOperaciones = async() =>{
@@ -49,33 +53,9 @@ const Operacion = () => {
     };
 
     fetchAllOperaciones();
-  }, [])
+  }, [updateTable])
 
 
-
-  const rows = [
-    {
-      nombre : 'Akagami',
-      apellido : 'Sanz',
-      pais      : 'Ecuador',
-      direccion : 'Sto Dgo',
-      telefono  : '09042842',
-    },
-    {
-      nombre : 'Monkey ',
-      apellido : 'D Luffy',
-      pais      : 'Japón',
-      direccion : 'Tokio',
-      telefono  : '093422346',
-    },
-    { 
-      nombre : 'Ichigo',
-      apellido : 'Kurosaki',
-      pais      : 'China',
-      direccion : 'Xixiang',
-      telefono  : '09442145',
-    },
-  ];
 
   const cols = [
     "codigoOperacion",
@@ -87,50 +67,16 @@ const Operacion = () => {
     "Acciones"
   ]
 
+  const [modalShow, setModalShow] = useState(false);
+  const [renderModal, setRenderModal] = useState(false);
+  const [type, setType] = useState('add');
+  const [data, setData] = useState({});
 
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalUpdate, setModalUpdate] = useState(false);
+  const fnBreakerModal = ({ data, type }) => {
+    
+    setModalShow(!modalShow); setType(type); setData({...data})
+    setRenderModal(!renderModal)
 
-  const fnBreakerModalAdd = () => {
-    setModalAdd(!modalAdd);
-  }
-
-  const fnBreakerModalUpdate = () => {
-    setModalUpdate(!modalUpdate);
-  }
-
-
-  const [toSubmit, setToSubmit] = useState({
-      "codigoOperacion" : '',
-      "tipo": '',
-      "estado" : true,
-      "nitAgenteAduana" : '',
-      "codigoTraslado": '',
-      "partidaId" :''
-
-  });
-
-  const handleChange = (e) => {
-
-    e.preventDefault();
-    setToSubmit((prev) => ({...prev, [e.target.name]:e.target.value}))
-    console.log(toSubmit);
-
-  }
-
-  const submitAdd = async(e) =>{
-    e.preventDefault();
-    await api_operacion.post(toSubmit);
-    window.location.reload()
-  }
-
-  const sumbitUpdate = async( e ) => {
-    e.preventDefault();
-    console.log(toSubmit)
-    await api_operacion.put(
-      toSubmit
-    );
-    window.location.reload()
   }
  
   const handleDelete = async(id) => {
@@ -138,196 +84,15 @@ const Operacion = () => {
     await api_operacion.delForId(
       id
     );
-    window.location.reload()
+    setUpdateTable((prev) => !prev)
   } 
 
-
-  /* const rowsParsed = rows.map(obj => Object.values(obj));  */
-  const StyledModal = {
-    position: 'absolute',
-    width: '50%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 20,
-    top: '50%',
-    left: '50%',
-    bgcolor: 'background.paper',
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-    transform: 'translate(-50%, -50%)',
-  
-  }
-  
-  const selectUpdateOrDelete = (data, option) => {
-    setToSubmit(data);
-    fnBreakerModalUpdate();
-  }
-
-
-  const bodyAdd = 
-    (<form onSubmit = { submitAdd }>
-        <h3>Agregar un viaje</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="codigoOperacion"
-              type="text"
-              name="codigoOperacion"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <InputField label="tipo"
-              type="text"
-              name="tipo"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="estado"
-              type="text"
-              name="estado"
-              onChange={handleChange}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='select' label='nitAgenteAduana'  type='text'
-              name="nitAgenteAduana"
-              onChange={handleChange}
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="codigoTraslado"
-              type="text"
-              name="codigoTraslado"
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="partidaId"
-              type="text"
-              name="partidaId"
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalAdd} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>)
-  
-  const bodyUpdate = 
-  (
-    <form onSubmit={sumbitUpdate }>
-        <h3>Editar un viaje</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="codigoOperacion"
-              type="text"
-              name = "codigoOperacion"
-              onChange={handleChange}
-              value = {toSubmit.codigoOperacion ?? '' }
-              
-              disabled = {true}
-            />
-          
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField label="tipo"
-              type="text"
-              name = "tipo"
-              onChange={handleChange}
-              value = {toSubmit.tipo ?? ''  }
-              
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="estado"
-              type="text"
-              name = "estado"
-              onChange={handleChange}
-              value = {toSubmit.estado ?? '' }
-             
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='nitAgenteAduana' label='nitAgenteAduana'  type='text'
-         
-             name = "nitAgenteAduana"
-             onChange={handleChange}
-             value = {toSubmit.nitAgenteAduana ?? ''  }
-          
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="codigoTraslado"
-              type="text"
-              name = "codigoTraslado"
-              onChange={handleChange}
-              value = {toSubmit.codigoTraslado ?? '' }
-             
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="partidaId"
-              type="text"
-              name = "partidaId"
-              onChange={handleChange}
-              value = {toSubmit.partidaId ?? '' }
-             
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalUpdate} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>
-  )
-
-
   return (
+  <Animated>
     <div className='layout'>
     <div className='item'>
     <Button className='btn' 
-      onClick={(fnBreakerModalAdd)}
+      onClick={() =>(fnBreakerModal({ data :{}, type : "add" }))}
       variant="contained" 
       startIcon={<AddCircleIcon/>}> 
       Insertar</Button>
@@ -354,7 +119,7 @@ const Operacion = () => {
                         { curr.tipo }
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                        { curr.estado }
+                        { (curr.estado)? 'activo' : 'inactivo'  }
                     </StyledTableCell>
                     <StyledTableCell align="center">
                         { curr.nitAgenteAduana }
@@ -370,15 +135,15 @@ const Operacion = () => {
               <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
-                <Button onClick={() => (selectUpdateOrDelete(
-                  {
+                <Button onClick={() => (fnBreakerModal(
+                  {data : {
                     "codigoOperacion" : curr._id,
                     "tipo":  curr.tipo,
                     "estado" : curr.estado,
                     "nitAgenteAduana" :curr.nitAgenteAduana,
                     "codigoTraslado" : curr.codigoTraslado,
                     "partidaId"     : curr.partidaId
-                                        }, "update"))}>  <EditIcon/>
+                                        }, type : "update"}))}>  <EditIcon/>
                 </Button>
               </ButtonGroup>
               </StyledTableCell>
@@ -389,31 +154,20 @@ const Operacion = () => {
       </StyledTable>
     </TableContainer>
     
-
-  <Modal
-      open={modalAdd}
-      onClose={fnBreakerModalAdd}
-  >
-
-    <div style={StyledModal}>
-    { bodyAdd }
-    </div>
-    
-
-  </Modal>  
-  
-  <Modal
-      open={modalUpdate}
-      onClose={fnBreakerModalUpdate}
-  >
-
-      <div style={StyledModal}>
-        {bodyUpdate}
-      </div>
-
-  </Modal>  
+    { (renderModal)?
+    <ModalOperacion 
+    opened      = {modalShow}
+    fnBreaker   = {setModalShow}
+    type        = {type}
+    data        = {data}
+    render      = {setRenderModal}
+    updateTable = {setUpdateTable}
+    /> : 
+    <></>
+    }
 
   </div>
+  </Animated>
   )
 }
 

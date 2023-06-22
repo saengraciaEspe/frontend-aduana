@@ -1,21 +1,21 @@
 
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper,Grid, Modal} from '@mui/material';
+import { Button, ButtonGroup,TableRow, TableHead, TableContainer,TableCell,tableCellClasses, TableBody, Table, styled, Paper} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import "./agente-aduana.css";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import api_agente_aduana from '../../services/agente-aduanero';
-import InputField from '../../components/input-field/input-field';
-
+import ModalAgenteAduana from './modal/modalAgenteAduana';
+import Animated from '../../components/animated/animated';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
+    background: '#579BB1',
+    color: '#FFF',
+  
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -23,13 +23,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&': {
+    backgroundColor: 'rgb(187, 209, 220)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+
+  '&:hover':{
+    backgroundColor : '#C9ECF8'
+  }
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -40,7 +44,8 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const AgenteAduana = () => {
 
   const [agentesAduana, setAgentesAduana] = useState([]);
-  
+  const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() =>{
 
     const fetchAllAgentesAduana = async() =>{
@@ -49,34 +54,8 @@ const AgenteAduana = () => {
     };
 
     fetchAllAgentesAduana();
-  }, [])
-
-
-
-  const rows = [
-    {
-      nombre : 'Akagami',
-      apellido : 'Sanz',
-      pais      : 'Ecuador',
-      direccion : 'Sto Dgo',
-      telefono  : '09042842',
-    },
-    {
-      nombre : 'Monkey ',
-      apellido : 'D Luffy',
-      pais      : 'Japón',
-      direccion : 'Tokio',
-      telefono  : '093422346',
-    },
-    { 
-      nombre : 'Ichigo',
-      apellido : 'Kurosaki',
-      pais      : 'China',
-      direccion : 'Xixiang',
-      telefono  : '09442145',
-    },
-  ];
-
+  }, [updateTable])
+  
   const cols = [
     "NIT",
     "Nombre",
@@ -88,248 +67,35 @@ const AgenteAduana = () => {
   ]
 
 
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalUpdate, setModalUpdate] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [renderModal, setRenderModal] = useState(false);
+  const [type, setType] = useState('add');
+  const [data, setData] = useState({});
 
-  const fnBreakerModalAdd = () => {
-    setModalAdd(!modalAdd);
-  }
+  
 
-  const fnBreakerModalUpdate = () => {
-    setModalUpdate(!modalUpdate);
-  }
+  console.log(updateTable);
 
-
-  const [toSubmit, setToSubmit] = useState({
-      "nitAgenteAduana" : '',
-      "nombre": '',
-      "apellido" : '',
-      "Pais" : '',
-      "direccion" :'',
-      "telefono" :''
-  });
-
-  const handleChange = (e) => {
-
-    e.preventDefault();
-    setToSubmit((prev) => ({...prev, [e.target.name]:e.target.value}))
-    console.log(toSubmit);
+  const fnBreakerModal = ({ data, type }) => {
+    
+    setModalShow(!modalShow); setType(type); setData({...data})
+    setRenderModal(!renderModal)
 
   }
-
-  const submitAdd = async(e) =>{
-    e.preventDefault();
-    await api_agente_aduana.post(toSubmit);
-    window.location.reload()
-  }
-
-  const sumbitUpdate = async( e ) => {
-    e.preventDefault();
-    console.log(toSubmit)
-    await api_agente_aduana.put(
-      toSubmit
-    );
-    window.location.reload()
-  }
- 
   const handleDelete = async(id) => {
   
     await api_agente_aduana.delForId(
       id
     );
-    window.location.reload()
+    setUpdateTable((prev) => !prev)
   } 
 
-
-  /* const rowsParsed = rows.map(obj => Object.values(obj));  */
-  const StyledModal = {
-    position: 'absolute',
-    width: '50%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 20,
-    top: '50%',
-    left: '50%',
-    bgcolor: 'background.paper',
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-    transform: 'translate(-50%, -50%)',
-  
-  }
-  
-  const selectUpdateOrDelete = (data, option) => {
-    setToSubmit(data);
-    fnBreakerModalUpdate();
-  }
-
-
-  const bodyAdd = 
-    (<form onSubmit = { submitAdd }>
-        <h3>Agregar un agente de aduana</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="NIT"
-              type="text"
-              name="nitAgenteAduana"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
-              type="text"
-              name="nombre"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Apellido"
-              type="text"
-              name="apellido"
-              onChange={handleChange}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='select' label='País'  type='text'
-              name="Pais"
-              onChange={handleChange}
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Dirección"
-              type="text"
-              name="direccion"
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Teléfono"
-              type="text"
-              name="telefono"
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalAdd} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>)
-  
-  const bodyUpdate = 
-  (
-    <form onSubmit={sumbitUpdate }>
-        <h3>Editar un agente de aduana</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="NIT"
-              type="text"
-              name = "nitAgenteAduana"
-              onChange={handleChange}
-              value = {toSubmit.nitAgenteAduana ?? '' }
-              
-              disabled = {true}
-            />
-          
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
-              type="text"
-              name = "nombre"
-              onChange={handleChange}
-              value = {toSubmit.nombre ?? ''  }
-              
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Apellido"
-              type="text"
-              name = "apellido"
-              onChange={handleChange}
-              value = {toSubmit.apellido ?? '' }
-             
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='pais' label='País'  type='text'
-         
-             name = "Pais"
-             onChange={handleChange}
-             value = {toSubmit.Pais ?? ''  }
-          
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Dirección"
-              type="text"
-              name = "direccion"
-              onChange={handleChange}
-              value = {toSubmit.direccion ?? ''  }
-             
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="Teléfono"
-              type="text"
-              name = "telefono"
-              onChange={handleChange}
-              value = {toSubmit.telefono ?? ''  }
-        
-              
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalUpdate} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>
-  )
-
-
   return (
+  <Animated>
     <div className='layout'>
     <div className='item'>
-    <Button className='btn' 
-      onClick={(fnBreakerModalAdd)}
+    <Button
+      onClick={() =>(fnBreakerModal({ data :{}, type : "add" }))}
       variant="contained" 
       startIcon={<AddCircleIcon/>}> 
       Insertar</Button>
@@ -372,14 +138,15 @@ const AgenteAduana = () => {
               <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
-                <Button onClick={() => (selectUpdateOrDelete(
-                  {nitAgenteAduana: curr._id, 
-                    nombre : curr.nombre,
-                    apellido:curr.apellido,
-                    Pais : curr.Pais,
-                    direccion : curr.direccion,
-                    telefono : curr.telefono
-                                        }, "update"))}>  <EditIcon/>
+                <Button onClick={() => (fnBreakerModal(
+                  { data : {
+                      nitAgenteAduana : curr._id, 
+                      nombre          : curr.nombre,
+                      apellido        : curr.apellido,
+                      Pais            : curr.Pais,
+                      direccion       : curr.direccion,
+                      telefono         : curr.telefono
+                    }, type: "update"}))} >  <EditIcon/>
                 </Button>
               </ButtonGroup>
               </StyledTableCell>
@@ -391,30 +158,16 @@ const AgenteAduana = () => {
     </TableContainer>
     
 
-  <Modal
-      open={modalAdd}
-      onClose={fnBreakerModalAdd}
-  >
-
-    <div style={StyledModal}>
-    { bodyAdd }
+{ (renderModal)? <ModalAgenteAduana 
+    opened      = {modalShow}
+    fnBreaker   = {setModalShow}
+    type        = {type}
+    data        = {data}
+    render      = {setRenderModal}
+    updateTable = {setUpdateTable}
+  /> : <></>}
     </div>
-    
-
-  </Modal>  
-  
-  <Modal
-      open={modalUpdate}
-      onClose={fnBreakerModalUpdate}
-  >
-
-      <div style={StyledModal}>
-        {bodyUpdate}
-      </div>
-
-  </Modal>  
-
-  </div>
+  </Animated>
   )
 }
 

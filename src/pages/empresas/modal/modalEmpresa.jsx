@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
-import { Modal, TextField, Button, Grid, MenuItem, Select, InputLabel,InputAdornment } from '@mui/material';
+import { Modal, TextField, Button, Grid, MenuItem, Select, InputLabel } from '@mui/material';
+
 import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
-import api_producto from '../../../services/empresa';
+import api_empresa from '../../../services/empresa';
 
 
 
@@ -28,55 +29,62 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 }));
 
-const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) => {
+const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
   
-  console.log(data?.partidaId)
+  console.log(data?.rifEmpresa)
 
   const { register, handleSubmit,
     formState :{ errors } } = useForm({
       mode : "onBlur",
       defaultValues : {
-        partidaId       :  data?.partidaId,
-        nombre          :  data?.nombre,
-        unidadFisica     :  data?.unidadFisica,
-        tarifaAdvalorem :  data?.tarifaAdvalorem,
-      
+        rifEmpresa      :  data?.rifEmpresa,
+        nombreEmpresa   :  data?.nombreEmpresa,
+        paisEmpresa     :  data?.paisEmpresa,
+        telefonoEmpresa :  data?.telefonoEmpresa,
+        fechaEmision    :  data?.fechaEmision,
+       
       }
 
     });
 
   const onAdd = async(data) => {
     console.log(data);
-    await api_producto.post(data);
+    await api_empresa.post(data);
     updateTable((prev) => !prev)
     fnBreaker(!opened); render(false); 
   }
 
   const onUpdate = async(data) => {
     console.log(data);
-    await api_producto.put(data);
+    await api_empresa.put(data);
     updateTable((prev) => !prev)
     fnBreaker(!opened); render(false); 
   }
 
   const errorValidMsg = {
-    partidaId : {
-      required : "El id de partida es requerido",
+    rifEmpresa : {
+      required : "El rif es requerido",
       pattern  : "Se debe ingresar un número de cédula, el cuál debe tener 10 dígitos"
     },
-    nombre : {
+    nombreEmpresa : {
       required : "El nombre es requerido",
       pattern  : "La primera letra del nombre debe empezar con mayúscula"
     },
-    unidadFisica : {
-      required : "La unidad física es requerida",
-      pattern  : "Se debe ingresar solo números"
+    paisEmpresa : {
+      required : "El país es requerido",
+      pattern  : "El país no tiene un formato correcto"
     },
-    tarifaAdvalorem:{
-      required : "La tarifa es requerida",
-      pattern  : "Se debe ingresar solo números"
+    telefonoEmpresa:{
+      required : "La teléfono es requerida",
+      pattern  : "El número de teléfono debe empezar con 09 seguido de 8 dígitos"
     },
+    fechaEmision : {
+      required : "La fecha es requerida es requerida",
+      
+    },
+  
+    
   }
 
 
@@ -89,61 +97,72 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Id de partida"
+            <StyledTextField label="RIF"
               type="text"
-              {...register('partidaId',{
+              {...register('rifEmpresa',{
                 pattern : /^\d{10}$/g,
                 required : true
               })}
               
               
-               error = { !!errors.partidaId }
-               helperText = {errorValidMsg["partidaId"][errors.partidaId?.type]}
+               error = { !!errors.rifEmpresa }
+               helperText = {errorValidMsg["rifEmpresa"][errors.rifEmpresa?.type]}
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Nombre de producto"
+            <StyledTextField label="Nombre de empresa"
               type="text"
-              {...register('nombre',
+              {...register('nombreEmpresa',
                 {
                   required: true,
                   pattern : /^[A-Za-z0-9\s\-()&,']+$/
                 })}
-              error = { !!errors.nombre }
-              helperText = {errorValidMsg["nombre"][errors.nombre?.type]}
+              error = { !!errors.nombreEmpresa }
+              helperText = {errorValidMsg["nombreEmpresa"][errors.nombreEmpresa?.type]}
             />
           
           </Grid>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Unidad física"
-              type="number"
-              {...register('unidadFisica',
+              label="País"
+              type="text"
+              {...register('paisEmpresa',
                 {
                   required: true,
-                  
+                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
-              error = { !!errors.unidadFisica }
-              helperText = {errorValidMsg["unidadFisica"][errors.unidadFisica?.type]}
-              InputProps={{endAdornment:<InputAdornment position="end">kg</InputAdornment>}}
+              error = { !!errors.paisEmpresa }
+              helperText = {errorValidMsg["paisEmpresa"][errors.paisEmpresa?.type]}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='Tarifa advalorem'  type='number'
-              {...register('tarifaAdvalorem',{
+            <StyledTextField id='select' label='Teléfono empresa'  type='text'
+              {...register('telefonoEmpresa',{
                 required: true,
-                
+                pattern : /^(09)\d{8}$/
               })}
-              error = { !!errors.tarifaAdvalorem }
-              helperText = {errorValidMsg["tarifaAdvalorem"][errors.tarifaAdvalorem?.type]}
+              error = { !!errors.telefonoEmpresa }
+              helperText = {errorValidMsg["telefonoEmpresa"][errors.telefonoEmpresa?.type]}
             >
       
 
             </StyledTextField>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <StyledTextField
+              label="Fecha de emisión"
+              type="text"
+              {...register('fechaEmision', {
+                required: true,
+              })}
+              error = { !!errors.fechaEmision }
+              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type]}
+            />
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
@@ -161,68 +180,79 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
     ),
     "update": (<div style={StyledModal} >
       <form onSubmit={ handleSubmit(onUpdate) } noValidate>
-        <h3>Editar un producto</h3>
+        <h3>Editar una empresa</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Id de partida"
+            <StyledTextField label="RIF"
               type="text"
-              {...register('partidaId',{
+              {...register('rifEmpresa',{
                 pattern : /^\d{10}$/g,
                 required : true
               })}
               
               
-               error = { !!errors.partidaId }
-               helperText = {errorValidMsg["partidaId"][errors.partidaId?.type]}
+               error = { !!errors.rifEmpresa }
+               helperText = {errorValidMsg["rifEmpresa"][errors.rifEmpresa?.type]}
                disabled={true}
             />
           
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="Nombre de producto"
+            <StyledTextField label="Nombre de empresa"
               type="text"
-              {...register('nombre',
+              {...register('nombreEmpresa',
                 {
                   required: true,
                   pattern : /^[A-Za-z0-9\s\-()&,']+$/
                 })}
-              error = { !!errors.nombre }
-              helperText = {errorValidMsg["nombre"][errors.nombre?.type]}
+              error = { !!errors.nombreEmpresa }
+              helperText = {errorValidMsg["nombreEmpresa"][errors.nombreEmpresa?.type]}
             />
           
           </Grid>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Unidad física"
+              label="País"
               type="text"
-              {...register('unidadFisica',
+              {...register('paisEmpresa',
                 {
                   required: true,
-                  
+                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
                 })}
-              error = { !!errors.unidadFisica }
-              helperText = {errorValidMsg["unidadFisica"][errors.unidadFisica?.type]}
-              InputProps={{endAdornment:<InputAdornment position="end">kg</InputAdornment>}}
+              error = { !!errors.paisEmpresa }
+              helperText = {errorValidMsg["paisEmpresa"][errors.paisEmpresa?.type]}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='Tarifa advalorem'  type='text'
-              {...register('tarifaAdvalorem',{
+            <StyledTextField id='select' label='Teléfono empresa'  type='text'
+              {...register('telefonoEmpresa',{
                 required: true,
-                
+                pattern : /^(09)\d{8}$/
               })}
-              error = { !!errors.tarifaAdvalorem }
-              helperText = {errorValidMsg["tarifaAdvalorem"][errors.tarifaAdvalorem?.type]}
+              error = { !!errors.telefonoEmpresa }
+              helperText = {errorValidMsg["telefonoEmpresa"][errors.telefonoEmpresa?.type]}
             >
       
 
             </StyledTextField>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <StyledTextField
+              label="Fecha de emisión"
+              type="text"
+              {...register('fechaEmision', {
+                required: true,
+              })}
+              error = { !!errors.fechaEmision }
+              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type]}
+            />
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
@@ -254,4 +284,4 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
   )
 }
 
-export default ModalProducto;
+export default ModalEmpresa;
