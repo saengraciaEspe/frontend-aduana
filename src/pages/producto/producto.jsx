@@ -7,15 +7,16 @@ import "./producto.css";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import api_producto from '../../services/producto';
-import InputField from '../../components/input-field/input-field';
+
+import ModalProducto from './modalProducto/modalProducto';
+import Animated from '../../components/animated/animated';
 
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
+    background: '#579BB1',
+    color: '#FFF',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -23,13 +24,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&': {
+    backgroundColor: 'rgb(187, 209, 220)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+  '&:hover':{
+    backgroundColor : '#C9ECF8'
+  }
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -40,7 +44,8 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const Producto = () => {
 
   const [products, setProducts] = useState([]);
-  
+  const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() =>{
 
     const fetchAllProducts = async() =>{
@@ -49,33 +54,9 @@ const Producto = () => {
     };
 
     fetchAllProducts();
-  }, [])
+  }, [updateTable])
 
 
-
-  const rows = [
-    {
-      nombre : 'Akagami',
-      apellido : 'Sanz',
-      pais      : 'Ecuador',
-      direccion : 'Sto Dgo',
-      telefono  : '09042842',
-    },
-    {
-      nombre : 'Monkey ',
-      apellido : 'D Luffy',
-      pais      : 'Japón',
-      direccion : 'Tokio',
-      telefono  : '093422346',
-    },
-    { 
-      nombre : 'Ichigo',
-      apellido : 'Kurosaki',
-      pais      : 'China',
-      direccion : 'Xixiang',
-      telefono  : '09442145',
-    },
-  ];
 
   const cols = [
     "partidaId",
@@ -85,17 +66,18 @@ const Producto = () => {
     "Acciones"
   ]
 
+  const [modalShow, setModalShow] = useState(false);
+  const [renderModal, setRenderModal] = useState(false);
+  const [type, setType] = useState('add');
+  const [data, setData] = useState({});
 
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalUpdate, setModalUpdate] = useState(false);
+  const fnBreakerModal = ({ data, type }) => {
+    
+    setModalShow(!modalShow); setType(type); setData({...data})
+    setRenderModal(!renderModal)
 
-  const fnBreakerModalAdd = () => {
-    setModalAdd(!modalAdd);
   }
 
-  const fnBreakerModalUpdate = () => {
-    setModalUpdate(!modalUpdate);
-  }
 
 
   const [toSubmit, setToSubmit] = useState({
@@ -105,35 +87,12 @@ const Producto = () => {
       "tarifaAdvalorem" : 0,
   });
 
-  const handleChange = (e) => {
-
-    e.preventDefault();
-    setToSubmit((prev) => ({...prev, [e.target.name]:e.target.value}))
-    console.log(toSubmit);
-
-  }
-
-  const submitAdd = async(e) =>{
-    e.preventDefault();
-    await api_producto.post(toSubmit);
-    window.location.reload()
-  }
-
-  const sumbitUpdate = async( e ) => {
-    e.preventDefault();
-    console.log(toSubmit)
-    await api_producto.put(
-      toSubmit
-    );
-    window.location.reload()
-  }
- 
   const handleDelete = async(id) => {
   
     await api_producto.delForId(
       id
     );
-    window.location.reload()
+    setUpdateTable((prev) => !prev)
   } 
 
 
@@ -151,146 +110,15 @@ const Producto = () => {
     transform: 'translate(-50%, -50%)',
   
   }
-  
-  const selectUpdateOrDelete = (data, option) => {
-    setToSubmit(data);
-    fnBreakerModalUpdate();
-  }
 
-
-  const bodyAdd = 
-    (<form onSubmit = { submitAdd }>
-        <h3>Agregar un producto</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="partidaId"
-              type="text"
-              name="partidaId"
-              onChange={handleChange}
-              required
-            />
-          
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
-              type="text"
-              name="nombre"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="unidadFisica"
-              type="number"
-              name="unidadFisica"
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='select' label='tarifaAdvalorem'  type='number'
-              name="tarifaAdvalorem"
-              onChange={handleChange}
-              required
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalAdd} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>)
-  
-  const bodyUpdate = 
-  (
-    <form onSubmit={sumbitUpdate }>
-        <h3>Editar un producto</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="partidaId"
-              type="text"
-              name = "partidaId"
-              onChange={handleChange}
-              value = {toSubmit.partidaId ?? '' }
-              required
-              disabled = {true}
-            />
-          
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField label="Nombre"
-              type="text"
-              name = "nombre"
-              onChange={handleChange}
-              value = {toSubmit.nombre ?? ''  }
-              required
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="unidadFisica"
-              type="number"
-              name = "unidadFisica"
-              onChange={handleChange}
-              value = {toSubmit.unidadFisica ?? '' }
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='pais' label='tarifaAdvalorem'  type='number'
-         
-             name = "tarifaAdvalorem"
-             onChange={handleChange}
-             value = {toSubmit.tarifaAdvalorem ?? ''  }
-             
-             required
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalUpdate} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>
-  )
 
 
   return (
+  <Animated>
     <div className='layout'>
     <div className='item'>
     <Button className='btn' 
-      onClick={(fnBreakerModalAdd)}
+      onClick={() =>(fnBreakerModal({ data :{}, type : "add" }))}
       variant="contained" 
       startIcon={<AddCircleIcon/>}> 
       Insertar</Button>
@@ -328,13 +156,13 @@ const Producto = () => {
               <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
-                <Button onClick={() => (selectUpdateOrDelete(
-                  {
+                <Button onClick={() => (fnBreakerModal(
+                  {data : {
                     "partidaId" : curr._id,
                     "nombre":  curr.nombre,
                     "unidadFisica" : curr.unidadFisica,
                     "tarifaAdvalorem" :curr.tarifaAdvalorem,
-                                        }, "update"))}>  <EditIcon/>
+                                        }, type : "update"}))}>  <EditIcon/>
                 </Button>
               </ButtonGroup>
               </StyledTableCell>
@@ -345,31 +173,17 @@ const Producto = () => {
       </StyledTable>
     </TableContainer>
     
-
-  <Modal
-      open={modalAdd}
-      onClose={fnBreakerModalAdd}
-  >
-
-    <div style={StyledModal}>
-    { bodyAdd }
-    </div>
-    
-
-  </Modal>  
-  
-  <Modal
-      open={modalUpdate}
-      onClose={fnBreakerModalUpdate}
-  >
-
-      <div style={StyledModal}>
-        {bodyUpdate}
-      </div>
-
-  </Modal>  
+    { (renderModal)? <ModalProducto 
+    opened      = {modalShow}
+    fnBreaker   = {setModalShow}
+    type        = {type}
+    data        = {data}
+    render      = {setRenderModal}
+    updateTable = {setUpdateTable}
+  /> : <></>}
 
   </div>
+  </Animated>
   )
 }
 

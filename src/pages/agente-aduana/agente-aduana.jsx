@@ -8,14 +8,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import api_agente_aduana from '../../services/agente-aduanero';
 import ModalAgenteAduana from './modal/modalAgenteAduana';
+import Animated from '../../components/animated/animated';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     background: '#579BB1',
     color: '#FFF',
-    
-
+  
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -45,6 +45,7 @@ const AgenteAduana = () => {
 
   const [agentesAduana, setAgentesAduana] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() =>{
 
     const fetchAllAgentesAduana = async() =>{
@@ -54,6 +55,7 @@ const AgenteAduana = () => {
 
     fetchAllAgentesAduana();
   }, [updateTable])
+  
   const cols = [
     "NIT",
     "Nombre",
@@ -89,6 +91,7 @@ const AgenteAduana = () => {
   } 
 
   return (
+  <Animated>
     <div className='layout'>
     <div className='item'>
     <Button
@@ -163,7 +166,8 @@ const AgenteAduana = () => {
     render      = {setRenderModal}
     updateTable = {setUpdateTable}
   /> : <></>}
-  </div>
+    </div>
+  </Animated>
   )
 }
 

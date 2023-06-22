@@ -6,16 +6,17 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 ;
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+
 import api_viaje from '../../services/viaje';
-import InputField from '../../components/input-field/input-field';
+import ModalViaje from './modal/modalViaje';
+import Animated from '../../components/animated/animated';
 
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
+    background: '#579BB1',
+    color: '#FFF',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -23,13 +24,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&': {
+    backgroundColor: 'rgb(187, 209, 220)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+  '&:hover':{
+    backgroundColor : '#C9ECF8'
+  }
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -40,7 +44,8 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const Viaje = () => {
 
   const [viajes, setViajes] = useState([]);
-  
+  const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() =>{
 
     const fetchAllViajes = async() =>{
@@ -49,33 +54,8 @@ const Viaje = () => {
     };
 
     fetchAllViajes();
-  }, [])
+  }, [updateTable])
 
-
-
-  const rows = [
-    {
-      nombre : 'Akagami',
-      apellido : 'Sanz',
-      pais      : 'Ecuador',
-      direccion : 'Sto Dgo',
-      telefono  : '09042842',
-    },
-    {
-      nombre : 'Monkey ',
-      apellido : 'D Luffy',
-      pais      : 'Japón',
-      direccion : 'Tokio',
-      telefono  : '093422346',
-    },
-    { 
-      nombre : 'Ichigo',
-      apellido : 'Kurosaki',
-      pais      : 'China',
-      direccion : 'Xixiang',
-      telefono  : '09442145',
-    },
-  ];
 
   const cols = [
     "codigoRuta",
@@ -87,49 +67,16 @@ const Viaje = () => {
     "Acciones"
   ]
 
+  const [modalShow, setModalShow] = useState(false);
+  const [renderModal, setRenderModal] = useState(false);
+  const [type, setType] = useState('add');
+  const [data, setData] = useState({});
 
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalUpdate, setModalUpdate] = useState(false);
+  const fnBreakerModal = ({ data, type }) => {
+    
+    setModalShow(!modalShow); setType(type); setData({...data})
+    setRenderModal(!renderModal)
 
-  const fnBreakerModalAdd = () => {
-    setModalAdd(!modalAdd);
-  }
-
-  const fnBreakerModalUpdate = () => {
-    setModalUpdate(!modalUpdate);
-  }
-
-
-  const [toSubmit, setToSubmit] = useState({
-      "codigoRuta" : '',
-      "paisOrigen": '',
-      "paisDestino" : '',
-      "puertoEntrada" : '',
-      "fechaSalida" : '',
-      "fechaIngreso" : ''
-  });
-
-  const handleChange = (e) => {
-
-    e.preventDefault();
-    setToSubmit((prev) => ({...prev, [e.target.name]:e.target.value}))
-    console.log(toSubmit);
-
-  }
-
-  const submitAdd = async(e) =>{
-    e.preventDefault();
-    await api_viaje.post(toSubmit);
-    window.location.reload()
-  }
-
-  const sumbitUpdate = async( e ) => {
-    e.preventDefault();
-    console.log(toSubmit)
-    await api_viaje.put(
-      toSubmit
-    );
-    window.location.reload()
   }
  
   const handleDelete = async(id) => {
@@ -137,7 +84,7 @@ const Viaje = () => {
     await api_viaje.delForId(
       id
     );
-    window.location.reload()
+    setUpdateTable((prev) => !prev)
   } 
 
 
@@ -155,179 +102,14 @@ const Viaje = () => {
     transform: 'translate(-50%, -50%)',
   
   }
-  
-  const selectUpdateOrDelete = (data, option) => {
-    setToSubmit(data);
-    fnBreakerModalUpdate();
-  }
-
-
-  const bodyAdd = 
-    (<form onSubmit = { submitAdd }>
-        <h3>Agregar un viaje</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="codigoRuta"
-              type="text"
-              name="codigoRuta"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <InputField label="paisOrigen"
-              type="text"
-              name="paisOrigen"
-              onChange={handleChange}
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="paisDestino"
-              type="text"
-              name="paisDestino"
-              onChange={handleChange}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='select' label='puertoEntrada'  type='text'
-              name="puertoEntrada"
-              onChange={handleChange}
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="fechaSalida"
-              type="text"
-              name="fechaSalida"
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="fechaIngreso"
-              type="text"
-              name="fechaIngreso"
-              onChange={handleChange}
-            />
-          </Grid>
-      
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalAdd} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>)
-  
-  const bodyUpdate = 
-  (
-    <form onSubmit={sumbitUpdate }>
-        <h3>Editar un viaje</h3>
-
-        <Grid container rowSpacing={{ xs: 2, md: 2 }}
-          columnSpacing={{ xs: 1, md: 2 }}
-        >
-          <Grid item xs={12} md={6}>
-            <InputField label="codigoRuta"
-              type="text"
-              name = "codigoRuta"
-              onChange={handleChange}
-              value = {toSubmit.codigoRuta ?? '' }
-              
-              disabled = {true}
-            />
-          
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField label="paisOrigen"
-              type="text"
-              name = "paisOrigen"
-              onChange={handleChange}
-              value = {toSubmit.paisOrigen ?? ''  }
-              
-            />
-          
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="paisDestino"
-              type="text"
-              name = "paisDestino"
-              onChange={handleChange}
-              value = {toSubmit.paisDestino ?? '' }
-             
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <InputField id='puertoEntrada' label='puertoEntrada'  type='text'
-         
-             name = "puertoEntrada"
-             onChange={handleChange}
-             value = {toSubmit.puertoEntrada ?? ''  }
-          
-            >
-            {/*  {countries.map((curr, i) =>(
-              <MenuItem key={i} value={curr}>
-                  {curr}
-             </MenuItem>
-             )) } */}
-
-            </InputField>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="fechaSalida"
-              type="text"
-              name = "fechaSalida"
-              onChange={handleChange}
-              value = {toSubmit.fechaSalida ?? '' }
-             
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputField
-              label="fechaIngreso"
-              type="text"
-              name = "fechaIngreso"
-              onChange={handleChange}
-              value = {toSubmit.fechaIngreso ?? '' }
-             
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div align="right">
-              <Button type='submit' color="primary" >Insertar</Button>
-              <Button onClick={fnBreakerModalUpdate} >Cancelar</Button>
-            </div>
-          </Grid>
-        </Grid>
-      </form>
-  )
 
 
   return (
+  <Animated>
     <div className='layout'>
     <div className='item'>
     <Button className='btn' 
-      onClick={(fnBreakerModalAdd)}
+      onClick={() =>(fnBreakerModal({ data :{}, type : "add" }))}
       variant="contained" 
       startIcon={<AddCircleIcon/>}> 
       Insertar</Button>
@@ -370,15 +152,15 @@ const Viaje = () => {
               <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 
                 <Button onClick={() => (handleDelete( curr._id ))} > <DeleteIcon/> </Button>
-                <Button onClick={() => (selectUpdateOrDelete(
-                  {
+                <Button onClick={() => (fnBreakerModal(
+                  {data : {
                     "codigoRuta" : curr._id,
                     "paisOrigen":  curr.paisOrigen,
                     "paisDestino" : curr.paisDestino,
                     "puertoEntrada" :curr.puertoEntrada,
                     "fechaSalida" : curr.fechaSalida,
                     "fechaIngreso" : curr.fechaIngreso
-                                        }, "update"))}>  <EditIcon/>
+                                        }, type : "update"}))}>  <EditIcon/>
                 </Button>
               </ButtonGroup>
               </StyledTableCell>
@@ -389,31 +171,20 @@ const Viaje = () => {
       </StyledTable>
     </TableContainer>
     
-
-  <Modal
-      open={modalAdd}
-      onClose={fnBreakerModalAdd}
-  >
-
-    <div style={StyledModal}>
-    { bodyAdd }
-    </div>
-    
-
-  </Modal>  
-  
-  <Modal
-      open={modalUpdate}
-      onClose={fnBreakerModalUpdate}
-  >
-
-      <div style={StyledModal}>
-        {bodyUpdate}
-      </div>
-
-  </Modal>  
+  { (renderModal)?
+    <ModalViaje 
+    opened      = {modalShow}
+    fnBreaker   = {setModalShow}
+    type        = {type}
+    data        = {data}
+    render      = {setRenderModal}
+    updateTable = {setUpdateTable}
+    /> : 
+    <></>
+    }
 
   </div>
+  </Animated>
   )
 }
 

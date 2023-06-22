@@ -10,6 +10,7 @@ import {Viaje} from './pages/viaje/viaje';
 import { Traslado } from './pages/traslado/traslado';
 import { Reporte } from './pages/reporte/reporte';
 import NavBar from './components/navbar/navbar';
+import Animated from './components/animated/animated';
 
 const Layout = ({ children }) =>{
 
