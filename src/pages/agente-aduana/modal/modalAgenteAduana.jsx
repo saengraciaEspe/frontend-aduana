@@ -162,7 +162,8 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
               type="text"
               {...register('direccion', {
                 required: true,
-                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                pattern : /^[A-Za-z0-9\s\-\.\,]+$/
+
               })}
               error = { !!errors.direccion }
               helperText = {errorValidMsg["direccion"][errors.direccion?.type]}
@@ -182,7 +183,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
           </Grid>
           <Grid item xs={12} md={12}>
             <div align="right">
-              <Button onClick={() =>{fnBreaker(!opened); render(false); updateTable((prev) =>!prev)  }}  
+              <Button 
                       type='submit' 
                       color="primary" >Insertar</Button>
               <Button onClick={() =>{fnBreaker(!opened); render(false)}}
