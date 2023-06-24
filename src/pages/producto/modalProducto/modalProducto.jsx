@@ -71,11 +71,11 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
     },
     unidadFisica : {
       required : "La unidad física es requerida",
-      pattern  : "Se debe ingresar solo números"
+      pattern  : "Se debe ingresar solo números mayores a 0"
     },
     tarifaAdvalorem:{
       required : "La tarifa es requerida",
-      pattern  : "Se debe ingresar solo números"
+      pattern  : "Se debe ingresar solo números mayores a 0"
     },
   }
 
@@ -124,7 +124,7 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
               {...register('unidadFisica',
                 {
                   required: true,
-                  
+                  pattern : /^[1-9][0-9]*$/
                 })}
               error = { !!errors.unidadFisica }
               helperText = {errorValidMsg["unidadFisica"][errors.unidadFisica?.type]}
@@ -136,10 +136,11 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
             <StyledTextField id='select' label='Tarifa advalorem'  type='number'
               {...register('tarifaAdvalorem',{
                 required: true,
-                
+                pattern : /^[1-9][0-9]*$/
               })}
-              error = { !!errors.tarifaAdvalorem }
-              helperText = {errorValidMsg["tarifaAdvalorem"][errors.tarifaAdvalorem?.type]}
+              error       = { !!errors.tarifaAdvalorem }
+              helperText  = {errorValidMsg["tarifaAdvalorem"][errors.tarifaAdvalorem?.type]}
+              InputProps  = {{endAdornment:<InputAdornment position="end">%</InputAdornment>}}
             >
       
 
