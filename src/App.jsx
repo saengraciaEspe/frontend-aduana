@@ -30,6 +30,11 @@ function App() {
       element : <Layout/> ,
       children : [
         {
+          path    : "/",
+          element : <Home/>
+        }
+        ,
+        {
           path     : "/operacion",
           element  : <Operacion/>
         },

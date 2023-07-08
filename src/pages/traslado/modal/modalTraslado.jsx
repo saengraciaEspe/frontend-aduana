@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
 import api_traslado from '../../../services/traslado';
-
+import api_viaje from '../../../services/viaje';
 
 
 const StyledModal = {
@@ -31,7 +31,27 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 const ModalTraslado = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
-  
+  const [viajes, setViajes] = useState([]);
+
+  useEffect(() =>{
+
+    const fetchAllViajes = async() =>{
+        const data = (await api_viaje.getAll() );
+
+        let dataParsed = data.map((curr)=>(
+          {
+            idviaje : curr._id
+          }
+        ))     
+
+
+        setViajes(dataParsed);
+    };
+
+    fetchAllViajes();
+  }, [])
+
+
   console.log(data?.partidaId)
 
   const { register, handleSubmit,
@@ -132,15 +152,25 @@ const ModalTraslado = ({ opened, fnBreaker, type, data, render, updateTable }) =
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='Código de ruta'  type='text'
-              {...register('codigoRuta',{
-                required: true,
-                
-              })}
-              error = { !!errors.codigoRuta }
-              helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
+          <StyledTextField select
+            label='codigoRuta'  type='text'
+            defaultValue=""
+            /* SelectProps={{
+              native: true,
+            }} */
+
+            {...register('codigoRuta',
+            {
+              required: true
+            })}
+            error = { !!errors.codigoRuta }
+            helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
             >
-      
+              {viajes.map((curr) => (
+              <MenuItem key={curr.idviaje} value={curr.idviaje}>
+                {curr.idviaje}
+              </MenuItem>
+            ))}
 
             </StyledTextField>
           </Grid>
@@ -210,15 +240,25 @@ const ModalTraslado = ({ opened, fnBreaker, type, data, render, updateTable }) =
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='Código de ruta'  type='text'
-              {...register('codigoRuta',{
-                required: true,
-                
-              })}
-              error = { !!errors.codigoRuta }
-              helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
+          <StyledTextField 
+            label='codigoRuta'  type='text'
+            /* defaultValue={data?.codigoRuta} */
+            {...register('codigoRuta',
+            {
+              required: true
+            })}
+            /* SelectProps={{
+              native: true,
+            }} */
+            error = { !!errors.codigoRuta }
+            helperText = {errorValidMsg["codigoRuta"][errors.codigoRuta?.type]}
+            disabled = {true}
             >
-      
+            {/*   {viajes.map((curr) => (
+              <option key={curr.idviaje} value={curr.idviaje}>
+                {curr.idviaje} 
+              </option>
+            ))} */}
 
             </StyledTextField>
           </Grid>
