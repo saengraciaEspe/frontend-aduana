@@ -10,6 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 
 
 import api_traslado from '../../services/traslado';
+import api_viaje from '../../services/viaje';
+
 import ModalTraslado from './modal/modalTraslado';
 import Animated from '../../components/animated/animated';
 
@@ -45,6 +47,8 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const Traslado = () => {
 
   const [traslados, setTraslados] = useState([]);
+  
+
   const [updateTable, setUpdateTable] = useState(false);
 
   useEffect(() =>{
@@ -57,6 +61,7 @@ const Traslado = () => {
     fetchAllTraslados();
   }, [updateTable])
 
+  
 
 
   const cols = [
