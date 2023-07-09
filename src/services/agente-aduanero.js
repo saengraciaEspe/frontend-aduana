@@ -1,16 +1,9 @@
 import API_INSTANCE from ".";
 
-
-
 const URL = "/aduana";
 
  const getAll = async() => {
-  const {data} = await API_INSTANCE.API_ADUANA.get(URL);
-  return data;
-}
-
-const getAllPais = async() => {
-  const {data} = await API_INSTANCE.API_PAISES.get();
+  const {data} = await API_INSTANCE.get(URL);
   return data;
 }
 
@@ -21,18 +14,18 @@ const post = async(data)=> {
 }
 
 const getForId = async(id) => {
-  const {data} = await API_INSTANCE.API_ADUANA.get(`${URL}/${id}`);
+  const {data} = await API_INSTANCE.get(`${URL}/${id}`);
  
   return data;
 }
 
 
 const put = async(data) => {
-  await API_INSTANCE.API_ADUANA.put(`${URL}/${data.nitAgenteAduana}`,data)
+  await API_INSTANCE.put(`${URL}/${data.nitAgenteAduana}`,data)
 } 
 
 const delForId = async(id) => {
-  await API_INSTANCE.API_ADUANA.delete(`${URL}/${id}`)
+  await API_INSTANCE.delete(`${URL}/${id}`)
 }
 
 
@@ -41,8 +34,7 @@ const api_agente_aduana = {
   getForId,
   post,
   put,
-  delForId,
-  getAllPais,
+  delForId
 }
 
 export default api_agente_aduana;

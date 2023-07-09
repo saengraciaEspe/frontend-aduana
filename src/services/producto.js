@@ -3,7 +3,7 @@ import API_INSTANCE from ".";
 const URL = "/producto";
 
  const getAll = async() => {
-  const {data} = await API_INSTANCE.API_ADUANA.get(URL);
+  const {data} = await API_INSTANCE.get(URL);
   return data;
 }
  
@@ -14,14 +14,14 @@ const post = async(data)=> {
 }
 
 const getForId = async(id) => {
-  const {data} = await API_INSTANCE.API_ADUANA.get(`${URL}/${id}`);
+  const {data} = await API_INSTANCE.get(`${URL}/${id}`);
  
   return data;
 }
 
 
 const put = async(data) => {
-  await API_INSTANCE.API_ADUANA.put(`${URL}/${data.partidaId}`,data)
+  await API_INSTANCE.put(`${URL}/${data.partidaId}`,data)
 } 
 
 const delForId = async(id) => {
