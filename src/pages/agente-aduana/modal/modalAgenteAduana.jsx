@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import "./modalAgenteAduana.css";
 import api_agente_aduana from '../../../services/agente-aduanero';
+import api_countries from '../../../services/countries/countries';
 
 
 
@@ -31,9 +32,23 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
-  
-  console.log(data?.nitAgenteAduana)
 
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() =>{
+
+    const fetchAllCountriesSouthAmerica = async() =>{
+        const data = await api_countries.getSouthAmerica();
+        setCountries(data);
+    };
+
+    fetchAllCountriesSouthAmerica();
+  }, [])
+
+
+  
+  console.log(data?.nitAgenteAduana);console.log(countries[0]?.value)
+  
   const { register, handleSubmit,
     formState :{ errors } } = useForm({
       mode : "onBlur",
@@ -41,10 +56,11 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
         nitAgenteAduana:  data?.nitAgenteAduana,
         nombre         :  data?.nombre,
         apellido       :  data?.apellido,
-        Pais           :  data?.Pais,
+        Pais           :  "",
         direccion      :  data?.direccion,
         telefono       :  data?.telefono
-      }
+      },
+      
 
     });
 
@@ -61,6 +77,12 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
     updateTable((prev) => !prev)
     fnBreaker(!opened); render(false); 
   }
+
+
+  const getCountriesSouthAmerica = async() => {
+   return await api_countries.getSouthAmerica();
+  }
+
 
   const errorValidMsg = {
     nitAgenteAduana : {
@@ -143,15 +165,22 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='País'  type='text'
-              {...register('Pais',{
-                required: true,
-                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
-              })}
-              error = { !!errors.Pais }
-              helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
+            <StyledTextField select
+            label='País'  type='text'
+            defaultValue=""
+            {...register('Pais',
+            {
+              required: true
+            })}
+            error = { !!errors.Pais }
+            helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
+
             >
-      
+              {countries.map((curr) => (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
 
             </StyledTextField>
           </Grid>
