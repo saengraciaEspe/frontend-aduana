@@ -10,6 +10,7 @@ import api_reporte from '../../services/reporte';
 
 import ModalReporte from './modal/modalReporte';
 import Animated from '../../components/animated/animated';
+import api_empresa from '../../services/empresa';
 
 
 
@@ -55,6 +56,10 @@ const Reporte = () => {
 
     fetchAllReportes();
   }, [updateTable])
+
+ 
+
+
 
 
   const cols = [

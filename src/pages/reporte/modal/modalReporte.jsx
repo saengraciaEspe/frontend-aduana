@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
 import api_reporte from '../../../services/reporte';
+import api_empresa from '../../../services/empresa';
+import api_operacion from '../../../services/operacion';
 
 
 
@@ -32,6 +34,46 @@ const StyledTextField = styled(TextField)(({  }) => ({
 const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
   
+
+  const [empresas, setEmpresas] = useState([]);
+
+  useEffect(() =>{
+
+    const getEmpresas = async() =>{
+        const data = (await api_empresa.getAll() );
+
+        let dataParsed = data.map((curr)=>(
+          {
+            idEmpresa : curr._id
+          }
+        ))     
+
+
+        setEmpresas(dataParsed);
+    };
+
+    getEmpresas();
+  }, [])
+
+  const [operaciones, setOperaciones] = useState([]);
+
+  useEffect(() =>{
+
+    const getOperaciones = async() =>{
+        const data = (await api_operacion.getAll() );
+
+        let dataParsed = data.map((curr)=>(
+          {
+            idOperacion : curr._id
+          }
+        ))     
+
+
+        setOperaciones(dataParsed);
+    };
+
+    getOperaciones();
+  }, [])
   console.log(data?.nReportes)
 
   const { register, handleSubmit,
@@ -64,19 +106,19 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
   const errorValidMsg = {
     nReportes : {
       required : "El id de partida es requerido",
-      pattern  : "Se debe ingresar un número de cédula, el cuál debe tener 10 dígitos"
+      pattern  : "Se debe ingresar un id de partida, el cuál debe tener 10 dígitos"
     },
     rifEmpresa : {
-      required : "El nombre es requerido",
-      pattern  : "La primera letra del nombre debe empezar con mayúscula"
+      required : "El rif es requerido",
+     
     },
     fechaEmision : {
-      required : "La unidad física es requerida",
+      required : "La fecha de emisión es requerida",
       pattern  : "Se debe ingresar solo números"
     },
     codigoOperacion:{
-      required : "La tarifa es requerida",
-      pattern  : "Se debe ingresar solo números"
+      required : "La código de operación es requerida",
+    
     }
   }
 
@@ -90,7 +132,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
           columnSpacing={{ xs: 1, md: 2 }}
         >
           <Grid item xs={12} md={6}>
-            <StyledTextField label="N° de reportes"
+            <StyledTextField label="N° de reportes" 
               type="text"
               {...register('nReportes',{
                 pattern : /^\d{10}$/g,
@@ -100,49 +142,63 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
               
                error = { !!errors.nReportes }
                helperText = {errorValidMsg["nReportes"][errors.nReportes?.type]}
-               disabled={true}
-            />
-          
+               disabled={false}
+            >
+             
+            </StyledTextField>
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="rif de empresa"
+            <StyledTextField label="rif de empresa" select
+            defaultValue=""
               type="text"
               {...register('rifEmpresa',
                 {
                   required: true,
-                  pattern : /^[A-Za-z0-9\s\-()&,']+$/
+                
                 })}
               error = { !!errors.rifEmpresa }
               helperText = {errorValidMsg["rifEmpresa"][errors.rifEmpresa?.type]}
-            />
-          
+            >
+              {empresas.map((curr) => (
+                <MenuItem key={curr.idEmpresa} value={curr.idEmpresa}>
+                  {curr.idEmpresa}
+                </MenuItem>
+              ))}
+            </StyledTextField>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="fecha de emision"
-              type="text"
+              /* label="fecha de emision" */
+              type="date"
               {...register('fechaEmision',
                 {
                   required: true,
                   
                 })}
+                
               error = { !!errors.fechaEmision }
-              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type]}
+              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type] || 'Fecha de emisión' }
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='Código de operación'  type='text'
+            <StyledTextField id='select' select
+            label='Código de operación'  type='text'
               {...register('codigoOperacion',{
                 required: true,
                 
               })}
-              error = { !!errors.puertoEntrada }
+              defaultValue=""
+              error = { !!errors.codigoOperacion }
               helperText = {errorValidMsg["codigoOperacion"][errors.codigoOperacion?.type]}
             >
-      
+              {operaciones.map((curr) => (
+                <MenuItem key={curr.idOperacion} value={curr.idOperacion}>
+                  {curr.idOperacion}
+                </MenuItem>
+              ))}
 
             </StyledTextField>
           </Grid>
@@ -162,7 +218,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
     ),
     "update": (<div style={StyledModal} >
       <form onSubmit={ handleSubmit(onUpdate) } noValidate>
-        <h3>Editar una empresa</h3>
+        <h3>Editar una reporte</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
@@ -193,6 +249,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
                 })}
               error = { !!errors.rifEmpresa }
               helperText = {errorValidMsg["rifEmpresa"][errors.rifEmpresa?.type]}
+              disabled={true}
             />
           
           </Grid>
@@ -200,7 +257,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
           <Grid item xs={12} md={6}>
             <StyledTextField
               label="fecha de emision"
-              type="text"
+              type="date"
               {...register('fechaEmision',
                 {
                   required: true,
@@ -208,6 +265,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
                 })}
               error = { !!errors.fechaEmision }
               helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type]}
+              
             />
           </Grid>
 
@@ -219,6 +277,7 @@ const ModalReporte = ({ opened, fnBreaker, type, data, render, updateTable }) =>
               })}
               error = { !!errors.puertoEntrada }
               helperText = {errorValidMsg["codigoOperacion"][errors.codigoOperacion?.type]}
+              disabled={true}
             >
       
 
