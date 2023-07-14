@@ -65,7 +65,7 @@ const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) =>
   const errorValidMsg = {
     rifEmpresa : {
       required : "El rif es requerido",
-      pattern  : "Se debe ingresar un número de cédula, el cuál debe tener 10 dígitos"
+      pattern  : "Se debe ingresar un rif, el cuál debe tener 10 dígitos"
     },
     nombreEmpresa : {
       required : "El nombre es requerido",
@@ -155,13 +155,13 @@ const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) =>
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Fecha de emisión"
-              type="text"
+              /* label="Fecha de emisión" */
+              type="date"
               {...register('fechaEmision', {
                 required: true,
               })}
               error = { !!errors.fechaEmision }
-              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type]}
+              helperText = {errorValidMsg["fechaEmision"][errors.fechaEmision?.type] || 'Fecha de emisión'}
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -246,7 +246,7 @@ const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) =>
           <Grid item xs={12} md={6}>
             <StyledTextField
               label="Fecha de emisión"
-              type="text"
+              type="date"
               {...register('fechaEmision', {
                 required: true,
               })}
