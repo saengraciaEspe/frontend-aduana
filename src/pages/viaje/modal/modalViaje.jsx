@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
 import api_viaje from '../../../services/viaje';
-
+import api_countries from '../../../services/countries/countries';
 
 
 const StyledModal = {
@@ -31,7 +31,20 @@ const StyledTextField = styled(TextField)(({  }) => ({
 
 const ModalViaje = ({ opened, fnBreaker, type, data, render, updateTable }) => {
 
-  
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() =>{
+
+    const fetchAllCountriesSouthAmerica = async() =>{
+        const data = await api_countries.getSouthAmerica();
+    
+
+        setCountries(data);
+    };
+
+    fetchAllCountriesSouthAmerica();
+  }, [])
+
   console.log(data?.codigoRuta)
 
   const { register, handleSubmit,
@@ -117,22 +130,32 @@ const ModalViaje = ({ opened, fnBreaker, type, data, render, updateTable }) => {
           
           <Grid item xs={12} md={6}>
             <StyledTextField label="País de origen"
-              type="text"
+              type="text" select
               {...register('paisOrigen',
                 {
                   required: true,
-                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+               
                 })}
+              defaultValue=""
               error = { !!errors.paisOrigen }
               helperText = {errorValidMsg["paisOrigen"][errors.paisOrigen?.type]}
-            />
+            >
+            { countries.map((curr) => 
+
+               (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
+            </StyledTextField>
           
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField
+            <StyledTextField select
               label="País de destino"
               type="text"
+              defaultValue=""
               {...register('paisDestino',
                 {
                   required: true,
@@ -141,7 +164,15 @@ const ModalViaje = ({ opened, fnBreaker, type, data, render, updateTable }) => {
                 })}
               error = { !!errors.paisDestino }
               helperText = {errorValidMsg["paisDestino"][errors.paisDestino?.type]}
-            />
+            >
+              { countries.map((curr) => 
+
+               (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
+            </StyledTextField>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -223,31 +254,55 @@ const ModalViaje = ({ opened, fnBreaker, type, data, render, updateTable }) => {
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <StyledTextField label="País de origen"
+          <StyledTextField label="País de origen" select
               type="text"
               {...register('paisOrigen',
                 {
                   required: true,
-                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+               
                 })}
+              defaultValue={data?.paisOrigen}
               error = { !!errors.paisOrigen }
               helperText = {errorValidMsg["paisOrigen"][errors.paisOrigen?.type]}
-            />
+            >
+              <MenuItem key={data} value={data?.paisOrigen}>
+                {data?.Pais}
+              </MenuItem> 
+            { countries.map((curr) => 
+
+               (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
+            </StyledTextField>
           
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField
+            <StyledTextField select
               label="País de destino"
               type="text"
               {...register('paisDestino',
                 {
                   required: true,
-                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                  
                 })}
+              defaultValue={data?.paisDestino}
               error = { !!errors.paisDestino }
               helperText = {errorValidMsg["paisDestino"][errors.paisDestino?.type]}
-            />
+            >
+               <MenuItem key={data} value={data?.paisDestino}>
+                {data?.paisDestino}
+              </MenuItem> 
+            { countries.map((curr) => 
+
+               (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
+            </StyledTextField>
           </Grid>
 
           <Grid item xs={12} md={6}>

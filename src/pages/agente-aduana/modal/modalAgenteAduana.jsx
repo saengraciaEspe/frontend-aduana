@@ -39,6 +39,8 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
 
     const fetchAllCountriesSouthAmerica = async() =>{
         const data = await api_countries.getSouthAmerica();
+    
+
         setCountries(data);
     };
 
@@ -47,7 +49,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
 
 
   
-  console.log(data?.nitAgenteAduana);console.log(countries[0]?.value)
+  console.log(data?.nitAgenteAduana);
   
   const { register, handleSubmit,
     formState :{ errors } } = useForm({
@@ -56,7 +58,7 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
         nitAgenteAduana:  data?.nitAgenteAduana,
         nombre         :  data?.nombre,
         apellido       :  data?.apellido,
-        Pais           :  "",
+        Pais           :  data?.Pais,
         direccion      :  data?.direccion,
         telefono       :  data?.telefono
       },
@@ -277,15 +279,26 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField id='select' label='País'  type='text'
+            
+            <StyledTextField id='select' label='País'  type='text' select
               {...register('Pais',{
                 required: true,
-                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+    
               })}
+              defaultValue={data?.Pais}
               error = { !!errors.Pais }
               helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
             >
-           
+              <MenuItem key={data} value={data?.Pais}>
+                {data?.Pais}
+              </MenuItem> 
+            { countries.map((curr) => 
+
+               (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
 
             </StyledTextField>
           </Grid>
