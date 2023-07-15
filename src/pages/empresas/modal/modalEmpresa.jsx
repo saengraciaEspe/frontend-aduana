@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
 import api_empresa from '../../../services/empresa';
-
+import api_countries from '../../../services/countries/countries';
 
 
 const StyledModal = {
@@ -30,7 +30,19 @@ const StyledTextField = styled(TextField)(({  }) => ({
 }));
 
 const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) => {
+  const [countries, setCountries] = useState([]);
 
+  useEffect(() =>{
+
+    const fetchAllCountriesSouthAmerica = async() =>{
+        const data = await api_countries.getSouthAmerica();
+    
+
+        setCountries(data);
+    };
+
+    fetchAllCountriesSouthAmerica();
+  }, [])
   
   console.log(data?.rifEmpresa)
 
@@ -126,17 +138,26 @@ const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) =>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField
+            <StyledTextField select
               label="País"
               type="text"
               {...register('paisEmpresa',
                 {
                   required: true,
-                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                 
                 })}
+              defaultValue=""
               error = { !!errors.paisEmpresa }
               helperText = {errorValidMsg["paisEmpresa"][errors.paisEmpresa?.type]}
-            />
+            >
+               {countries.map((curr) => (
+                <MenuItem key={curr.value} value={curr.value}>
+                  {curr.value}
+                </MenuItem>
+              ))}
+
+            </StyledTextField>
+
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -216,17 +237,29 @@ const ModalEmpresa = ({ opened, fnBreaker, type, data, render, updateTable }) =>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledTextField
+            <StyledTextField select
+            
               label="País"
               type="text"
               {...register('paisEmpresa',
                 {
                   required: true,
-                  pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
+                 
                 })}
               error = { !!errors.paisEmpresa }
               helperText = {errorValidMsg["paisEmpresa"][errors.paisEmpresa?.type]}
-            />
+              defaultValue={data.paisEmpresa}
+            >
+               <MenuItem key={data} value={data?.paisEmpresa}>
+                {data?.paisEmpresa}
+              </MenuItem> 
+               {countries.map((curr) => (
+              <MenuItem key={curr.value} value={curr.value}>
+                {curr.value}
+              </MenuItem>
+            ))}
+
+            </StyledTextField>
           </Grid>
 
           <Grid item xs={12} md={6}>

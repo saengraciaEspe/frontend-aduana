@@ -4,7 +4,7 @@ import { Modal, TextField, Button, Grid, MenuItem, Select, InputLabel,InputAdorn
 import { useForm } from 'react-hook-form';
 
 /* import "./ModalEmpresa.css"; */
-import api_producto from '../../../services/empresa';
+import api_producto from '../../../services/producto';
 
 
 
@@ -39,7 +39,7 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
       defaultValues : {
         partidaId       :  data?.partidaId,
         nombre          :  data?.nombre,
-        unidadFisica     :  data?.unidadFisica,
+        unidadFisica    :  data?.unidadFisica,
         tarifaAdvalorem :  data?.tarifaAdvalorem,
       
       }
@@ -83,7 +83,7 @@ const ModalProducto = ({ opened, fnBreaker, type, data, render, updateTable }) =
   const modalType = {
     "add": (<div style={StyledModal} >
       <form onSubmit={ handleSubmit(onAdd) } noValidate>
-        <h3>Agregar una empresa</h3>
+        <h3>Agregar un producto</h3>
 
         <Grid container rowSpacing={{ xs: 2, md: 2 }}
           columnSpacing={{ xs: 1, md: 2 }}
