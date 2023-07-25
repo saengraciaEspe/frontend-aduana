@@ -2,10 +2,19 @@ import API_INSTANCE from ".";
 
 const URL = "/aduana";
 
+
  const getAll = async() => {
   const {data} = await API_INSTANCE.get(URL);
   return data;
 }
+
+const getAllpg = async() => {
+  const {data} = await API_INSTANCE.get("/postgres"+URL);
+  return data;
+}
+
+
+
 
 
 
@@ -34,7 +43,8 @@ const api_agente_aduana = {
   getForId,
   post,
   put,
-  delForId
+  delForId,
+  getAllpg
 }
 
 export default api_agente_aduana;
