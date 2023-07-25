@@ -8,6 +8,11 @@ const URL = "/producto";
 }
  
 
+const getAllpg = async() => {
+  const {data} = await API_INSTANCE.get("/postgres"+URL);
+  return data;
+}
+
 
 const post = async(data)=> {
   await API_INSTANCE.post(URL,data);
@@ -34,7 +39,8 @@ const api_producto = {
   getForId,
   post,
   put,
-  delForId
+  delForId,
+  getAllpg
 }
 
 export default api_producto;
