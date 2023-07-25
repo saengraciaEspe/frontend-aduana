@@ -137,7 +137,6 @@ const ModalOperacion = ({ opened, fnBreaker, type, data, render, updateTable }) 
     },
     codigoTraslado:{
       required : "La código de traslado es requerida",
-     
     },
     partidaId:{
       required : "El id de partida es requerida",
@@ -175,7 +174,7 @@ const ModalOperacion = ({ opened, fnBreaker, type, data, render, updateTable }) 
               {...register('tipo',
                 {
                   required: true,
-                  pattern : /^[A-Za-z]+$/
+                  pattern : /^[A-Za-z0-9 ]*$/
                 })}
               error = { !!errors.tipo }
               helperText = {errorValidMsg["tipo"][errors.tipo?.type]}
