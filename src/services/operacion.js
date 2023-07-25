@@ -7,6 +7,11 @@ const URL = "/operacion";
   return data;
 }
 
+const getAllpg = async() => {
+  const {data} = await API_INSTANCE.get("/postgres"+URL);
+  return data;
+}
+
 
 
 const post = async(data)=> {
@@ -34,7 +39,8 @@ const api_operacion = {
   getForId,
   post,
   put,
-  delForId
+  delForId,
+  getAllpg
 }
 
 export default api_operacion;
