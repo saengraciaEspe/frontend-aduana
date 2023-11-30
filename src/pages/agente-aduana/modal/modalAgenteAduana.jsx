@@ -279,26 +279,15 @@ const ModalAgenteAduana = ({ opened, fnBreaker, type, data, render, updateTable 
           </Grid>
 
           <Grid item xs={12} md={6}>
-            
-            <StyledTextField id='select' label='País'  type='text' select
+            <StyledTextField id='select' label='País'  type='text'
               {...register('Pais',{
                 required: true,
-    
+                pattern : /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([ ]?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/
               })}
-              defaultValue={data?.Pais}
               error = { !!errors.Pais }
               helperText = {errorValidMsg["Pais"][errors.Pais?.type]}
             >
-              <MenuItem key={data} value={data?.Pais}>
-                {data?.Pais}
-              </MenuItem> 
-            { countries.map((curr) => 
-
-               (
-              <MenuItem key={curr.value} value={curr.value}>
-                {curr.value}
-              </MenuItem>
-            ))}
+           
 
             </StyledTextField>
           </Grid>
